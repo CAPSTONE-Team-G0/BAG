@@ -37,7 +37,7 @@ Set-ExecutionPolicy -Scope Process -ExecutionPolicy Bypass
 
 #### Mac/Linux
 
-```bash
+```
 python3 -m venv .venv
 source .venv/bin/activate
 ```
@@ -54,7 +54,7 @@ at the beginning of your terminal.
 
 ### 2) Install Dependencies
 
-```bash
+```
 pip install -r requirements.txt
 ```
 
@@ -73,6 +73,7 @@ export FLASK_APP=app
 flask init-db
 ```
 ### 4) Run the app
+```
 flask run
 ```
 
