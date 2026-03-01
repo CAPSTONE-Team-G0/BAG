@@ -53,20 +53,25 @@ at the beginning of your terminal.
 ---
 
 ### 2) Install Dependencies
+
+```bash
 pip install -r requirements.txt
+```
 
 ### 3) Initialize Database
 
 #### Windows (PowerShell)
 
+```powershell
 $env:FLASK_APP="app"
 flask init-db
+```
 
 #### Mac/Linux
-
+```
 export FLASK_APP=app
 flask init-db
-
+```
 ### 4) Run the app
 flask run
 ```
