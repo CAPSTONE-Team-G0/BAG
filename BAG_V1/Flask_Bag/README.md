@@ -25,30 +25,49 @@ This is a working Flask + SQLite prototype for the **Bag** capstone project.
 
 ## Quickstart
 
-### 1) Create venv and install
-```bash
-python -m venv .venv
-# Windows:
-.venv\Scripts\activate
-# Mac/Linux:
-# source .venv/bin/activate
+### 1) Create and Activate Virtual Environment
 
-pip install -r requirements.txt
+#### Windows (PowerShell)
+
+```powershell
+py -m venv .venv
+Set-ExecutionPolicy -Scope Process -ExecutionPolicy Bypass
+.\.venv\Scripts\Activate.ps1
 ```
 
-### 2) Initialize database
+#### Mac/Linux
+
 ```bash
-# Windows PowerShell:
+python3 -m venv .venv
+source .venv/bin/activate
+```
+
+You should now see:
+
+```
+(.venv)
+```
+
+at the beginning of your terminal.
+
+---
+
+### 2) Install Dependencies
+pip install -r requirements.txt
+
+### 3) Initialize Database
+
+#### Windows (PowerShell)
+
 $env:FLASK_APP="app"
 flask init-db
 
-# Mac/Linux:
-# export FLASK_APP=app
-# flask init-db
-```
+#### Mac/Linux
 
-### 3) Run the app
-```bash
+export FLASK_APP=app
+flask init-db
+
+### 4) Run the app
 flask run
 ```
 
