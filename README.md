@@ -1,5 +1,7 @@
-Joey Ackerman-Lowery, 
-Paul Gayle, 
-Mattea Isley, 
-Lydia Loffert
+# The Team
+
+- Joey Ackerman-Lowery, 
+- Paul Gayle, 
+- Mattea Isley, 
+- Lydia Loffert
 
