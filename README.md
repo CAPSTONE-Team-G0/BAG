@@ -3,7 +3,6 @@
 
 This is a working Flask + SQLite prototype for the **Bag** capstone project.
 
-## Features (Option B: MVP + 100% grade extras)
 - Register / Login / Logout (hashed passwords, sessions)
 - Profile (name, school, default semester weeks)
 - Semester create + select (active semester stored in session)
