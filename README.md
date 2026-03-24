@@ -1,15 +1,8 @@
-CONFIRMED WORKING 3/24
-
-
-
-
-
-
-
 # Bag (Flask) — Semester-Based Financial Pacing App
 
 This is a working Flask + SQLite prototype for the **Bag** capstone project.
 
+## Features (Option B: MVP + 100% grade extras)
 - Register / Login / Logout (hashed passwords, sessions)
 - Profile (name, school, default semester weeks)
 - Semester create + select (active semester stored in session)
@@ -32,55 +25,30 @@ This is a working Flask + SQLite prototype for the **Bag** capstone project.
 
 ## Quickstart
 
-### 1) Create and Activate Virtual Environment
+### 1) Create venv and install
+```bash
+python -m venv .venv
+# Windows:
+.venv\Scripts\activate
+# Mac/Linux:
+# source .venv/bin/activate
 
-#### Windows (PowerShell)
-
-```powershell
-py -m venv .venv
-Set-ExecutionPolicy -Scope Process -ExecutionPolicy Bypass
-.\.venv\Scripts\Activate.ps1
-```
-
-#### Mac/Linux
-
-```
-python3 -m venv .venv
-source .venv/bin/activate
-```
-
-You should now see:
-
-```
-(.venv)
-```
-
-at the beginning of your terminal.
-
----
-
-### 2) Install Dependencies
-
-```
 pip install -r requirements.txt
 ```
 
-### 3) Initialize Database
-
-#### Windows (PowerShell)
-
-```powershell
+### 2) Initialize database
+```bash
+# Windows PowerShell:
 $env:FLASK_APP="app"
 flask init-db
+
+# Mac/Linux:
+# export FLASK_APP=app
+# flask init-db
 ```
 
-#### Mac/Linux
-```
-export FLASK_APP=app
-flask init-db
-```
-### 4) Run the app
-```
+### 3) Run the app
+```bash
 flask run
 ```
 
