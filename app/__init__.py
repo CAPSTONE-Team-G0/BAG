@@ -1,4 +1,5 @@
 from flask import Flask
+
 from .db import init_app as init_db_app
 from .auth import bp as auth_bp
 from .routes.home import bp as home_bp
@@ -8,6 +9,7 @@ from .routes.aid import bp as aid_bp
 from .routes.transactions import bp as transactions_bp
 from .routes.categories import bp as categories_bp
 from .routes.dashboard import bp as dashboard_bp
+from .routes.parent_access import bp as parent_access_bp
 
 
 def create_app():
@@ -27,5 +29,6 @@ def create_app():
     app.register_blueprint(transactions_bp)
     app.register_blueprint(categories_bp)
     app.register_blueprint(dashboard_bp)
+    app.register_blueprint(parent_access_bp)
 
     return app

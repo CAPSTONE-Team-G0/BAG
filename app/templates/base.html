@@ -13,19 +13,26 @@
       <div class="tagline">Secure your bag. Own your independence.</div>
     </div>
     <nav class="nav">
-      {% if session.get('user_id') %}
-        <a href="{{ url_for('dashboard.dashboard') }}">Dashboard</a>
-        <a href="{{ url_for('transactions.transaction_new') }}">Add Transaction</a>
-        <a href="{{ url_for('aid.aid_new') }}">Add Aid</a>
-        <a href="{{ url_for('semesters.semesters') }}">Semesters</a>
-        <a href="{{ url_for('categories.categories') }}">Categories</a>
-        <a href="{{ url_for('profile.profile') }}">Profile</a>
-        <a href="{{ url_for('auth.logout') }}">Logout</a>
-      {% else %}
-        <a href="{{ url_for('auth.login') }}">Login</a>
-        <a href="{{ url_for('auth.register') }}">Register</a>
-      {% endif %}
-    </nav>
+  {% if session.get('user_id') %}
+
+    {% if session.get('user_role') == 'student' %}
+      <a href="{{ url_for('dashboard.dashboard') }}">Dashboard</a>
+      <a href="{{ url_for('transactions.transaction_new') }}">Add Transaction</a>
+      <a href="{{ url_for('aid.aid_new') }}">Add Aid</a>
+      <a href="{{ url_for('semesters.semesters') }}">Semesters</a>
+      <a href="{{ url_for('categories.categories') }}">Categories</a>
+      <a href="{{ url_for('profile.profile') }}">Profile</a>
+      <a href="{{ url_for('parent_access.parent_access') }}">Parent Access</a>
+    {% endif %}
+
+    {% if session.get('user_role') == 'parent' %}
+      <a href="{{ url_for('parent_access.parent_access') }}">View Student</a>
+    {% endif %}
+
+    <a href="{{ url_for('auth.logout') }}">Logout</a>
+
+  {% endif %}
+</nav>
   </header>
 
   <main class="container">

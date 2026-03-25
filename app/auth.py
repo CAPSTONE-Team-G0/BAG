@@ -17,11 +17,27 @@ def login_required(view):
     return wrapped
 
 
+def student_required(view):
+    @wraps(view)
+    def wrapped(*args, **kwargs):
+        if session.get("user_id") is None:
+            return redirect(url_for("auth.login"))
+
+        if session.get("user_role") != "student":
+            flash("Access denied.")
+            return redirect(url_for("parent_access.parent_access"))
+
+        return view(*args, **kwargs)
+
+    return wrapped
+
+
 @bp.route("/register", methods=["GET", "POST"])
 def register():
     if request.method == "POST":
         email = (request.form.get("email") or "").strip().lower()
         password = request.form.get("password") or ""
+        role = (request.form.get("role") or "student").strip().lower()
 
         if not email:
             flash("Email is required.")
@@ -29,6 +45,10 @@ def register():
 
         if not password or len(password) < 6:
             flash("Password is required (min 6 characters).")
+            return render_template("register.html")
+
+        if role not in ("student", "parent"):
+            flash("Please select a valid account type.")
             return render_template("register.html")
 
         db = get_db()
@@ -42,8 +62,8 @@ def register():
             return redirect(url_for("auth.login"))
 
         db.execute(
-            "INSERT INTO users (email, password_hash) VALUES (?, ?)",
-            (email, generate_password_hash(password)),
+            "INSERT INTO users (email, password_hash, role) VALUES (?, ?, ?)",
+            (email, generate_password_hash(password), role),
         )
         db.commit()
 
@@ -71,8 +91,13 @@ def login():
 
         session.clear()
         session["user_id"] = user["id"]
+        session["user_role"] = user["role"]
 
         flash("Welcome back.")
+
+        if user["role"] == "parent":
+            return redirect(url_for("parent_access.parent_access"))
+
         return redirect(url_for("dashboard.dashboard"))
 
     return render_template("login.html")

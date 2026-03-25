@@ -1,5 +1,5 @@
 from flask import Blueprint, flash, redirect, render_template, session, url_for
-from app.auth import login_required
+from app.auth import login_required, student_required
 from app.common.session_utils import active_semester_id, current_user_id
 from app.db import get_db
 from app.services.dashboard_service import load_dashboard_data
@@ -9,6 +9,7 @@ bp = Blueprint("dashboard", __name__)
 
 @bp.route("/dashboard")
 @login_required
+@student_required
 def dashboard():
     db = get_db()
     uid = current_user_id()
