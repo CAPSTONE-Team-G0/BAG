@@ -1,42 +1,185 @@
-# Bag (Flask) — Modularized Team Version
+# BAG — Semester-Based Financial Pacing App
 
-## What changed
-The original `app/core.py` was split into feature-based route files and shared services so multiple people can work without constantly editing the same file.
+BAG is a Flask + SQLite web app that helps students manage financial aid, track expenses, and monitor spending across a semester. It allows users to create an account, set up a profile, create semesters, add aid and transactions, and view a dashboard that compares spending pace against semester progress.
 
-## New structure
-- `app/auth.py` → login/register/logout only
-- `app/routes/home.py` → `/`
-- `app/routes/profile.py` → profile page
-- `app/routes/semesters.py` → semester list/create/select
-- `app/routes/aid.py` → aid form
-- `app/routes/transactions.py` → income/expense form
-- `app/routes/categories.py` → category management
-- `app/routes/dashboard.py` → dashboard page
-- `app/services/category_service.py` → default category seeding
-- `app/services/semester_service.py` → semester validation helpers
-- `app/services/dashboard_service.py` → dashboard calculations/data loading
-- `app/common/money.py` → cents conversion helpers
-- `app/common/session_utils.py` → active user/semester session helpers
-- `app/common/constants.py` → shared constants
+## Features
 
-## Suggested team ownership
-- Person 1: `auth.py` + templates for login/register
-- Person 2: `routes/profile.py` and `routes/semesters.py`
-- Person 3: `routes/aid.py`, `routes/transactions.py`, `routes/categories.py`
-- Person 4: `routes/dashboard.py` + `services/dashboard_service.py` + dashboard template/CSS
-- Person 5: `db.py`, `schema.sql`, tests, README, integration cleanup
+* User registration, login, and logout
+* Profile setup
+* Semester creation and selection
+* Financial aid entry
+* Income and expense tracking
+* Category tracking
+* Dashboard with:
 
-## Team rules to avoid breakage
-1. Do not put new route logic back into one giant file.
-2. Put shared math/validation in `services/` or `common/`.
-3. Keep each blueprint responsible for one feature.
-4. If two features need the same helper, move it out of the route file.
-5. Agree on one person to handle merges and run the app before pushing.
+  * current week of semester
+  * percent of semester elapsed
+  * percent of funds spent
+  * safe-to-spend amount
+  * pacing alerts
+  * category totals
+  * run-out projection
 
-## High-risk files
-These should be edited carefully because changes affect everyone:
-- `app/__init__.py`
-- `app/db.py`
-- `app/schema.sql`
-- shared helpers in `app/common/`
-- shared services in `app/services/`
+## Tech Stack
+
+* Python
+* Flask
+* Jinja2
+* SQLite
+* HTML/CSS
+
+## Project Structure
+
+```
+BAG/
+│
+├── app/
+├── instance/
+├── tests/
+├── requirements.txt
+├── wsgi.py
+├── README.md
+└── README_MODULARIZED.md
+```
+
+## Requirements
+
+Before running the program, install:
+
+* Python 3.10 or newer
+* pip
+* VS Code or another code editor
+
+## Setup Instructions
+
+### 1. Clone or download the repository
+
+```
+git clone https://github.com/CAPSTONE-Team-G0/BAG.git
+cd BAG
+```
+
+### 2. Create a virtual environment
+
+#### Windows PowerShell
+
+```
+python -m venv venv
+venv\Scripts\Activate.ps1
+```
+
+If PowerShell asks whether to trust the script, choose:
+
+```
+R = Run once
+```
+
+#### Windows Command Prompt
+
+```
+python -m venv venv
+venv\Scripts\activate
+```
+
+### 3. Install dependencies
+
+```
+pip install -r requirements.txt
+```
+
+## Initialize the Database
+
+Before running the app for the first time, initialize the database.
+
+### Windows PowerShell
+
+```
+$env:FLASK_APP="app"
+flask init-db
+```
+
+### Windows Command Prompt
+
+```
+set FLASK_APP=app
+flask init-db
+```
+
+## Run the Application
+
+### PowerShell
+
+```
+flask --app app --debug run
+```
+
+### Command Prompt
+
+```
+flask --app app --debug run
+```
+
+Then open this in your browser:
+
+```
+http://127.0.0.1:5000
+```
+
+## How to Use the App
+
+1. Register a new account
+2. Log in
+3. Create your profile
+4. Create a semester
+5. Select the semester
+6. Add financial aid
+7. Add income and expense transactions
+8. Open the dashboard to review your financial pace
+
+## Running Tests
+
+```
+pytest -q
+```
+
+## Troubleshooting
+
+### Python not found
+
+Make sure Python is installed and added to PATH.
+
+### Virtual environment will not activate
+
+Use Command Prompt instead of PowerShell, or allow the script to run once in PowerShell.
+
+### Flask app will not start
+
+Make sure you installed dependencies:
+
+```
+pip install -r requirements.txt
+```
+
+### Database errors
+
+Run:
+
+```
+flask init-db
+```
+
+before starting the app.
+
+### Internal Server Error after login
+
+Check the VS Code terminal for the exact error message and update any outdated route names (for example, replace `core.dashboard` with `dashboard.dashboard`).
+
+## Notes
+
+* Currency values are stored in cents
+* The active semester is stored in session data
+* SQLite is used for local storage
+
+## Contributors
+
+CAPSTONE-Team-G0
