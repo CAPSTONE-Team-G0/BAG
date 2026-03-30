@@ -3,6 +3,7 @@ CREATE TABLE IF NOT EXISTS users (
   id INTEGER PRIMARY KEY AUTOINCREMENT,
   email TEXT UNIQUE NOT NULL,
   password_hash TEXT NOT NULL,
+  role TEXT NOT NULL DEFAULT 'student' CHECK (role IN ('student', 'parent')),
   created_at TEXT NOT NULL DEFAULT (datetime('now'))
 );
 
@@ -20,8 +21,8 @@ CREATE TABLE IF NOT EXISTS semesters (
   id INTEGER PRIMARY KEY AUTOINCREMENT,
   user_id INTEGER NOT NULL,
   name TEXT NOT NULL,
-  start_date TEXT NOT NULL, -- YYYY-MM-DD
-  end_date TEXT NOT NULL,   -- YYYY-MM-DD
+  start_date TEXT NOT NULL,
+  end_date TEXT NOT NULL,
   weeks INTEGER NOT NULL,
   created_at TEXT NOT NULL DEFAULT (datetime('now')),
   FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE
@@ -31,10 +32,10 @@ CREATE TABLE IF NOT EXISTS semesters (
 CREATE TABLE IF NOT EXISTS aid_awards (
   id INTEGER PRIMARY KEY AUTOINCREMENT,
   semester_id INTEGER NOT NULL,
-  source_type TEXT NOT NULL, -- FAFSA, GI_Bill, Scholarship, Loan, Savings, Other
+  source_type TEXT NOT NULL,
   label TEXT NOT NULL,
   amount_cents INTEGER NOT NULL CHECK (amount_cents >= 0),
-  disbursement_date TEXT NOT NULL, -- YYYY-MM-DD
+  disbursement_date TEXT NOT NULL,
   created_at TEXT NOT NULL DEFAULT (datetime('now')),
   FOREIGN KEY (semester_id) REFERENCES semesters(id) ON DELETE CASCADE
 );
@@ -56,11 +57,26 @@ CREATE TABLE IF NOT EXISTS transactions (
   semester_id INTEGER NOT NULL,
   type TEXT NOT NULL CHECK (type IN ('income','expense')),
   amount_cents INTEGER NOT NULL CHECK (amount_cents >= 0),
-  date TEXT NOT NULL, -- YYYY-MM-DD
+  date TEXT NOT NULL,
   category_id INTEGER,
   note TEXT,
   created_at TEXT NOT NULL DEFAULT (datetime('now')),
   FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE,
   FOREIGN KEY (semester_id) REFERENCES semesters(id) ON DELETE CASCADE,
   FOREIGN KEY (category_id) REFERENCES categories(id) ON DELETE SET NULL
+);
+
+-- PARENT / GUARDIAN VIEW LINKS
+CREATE TABLE IF NOT EXISTS parent_links (
+  id INTEGER PRIMARY KEY AUTOINCREMENT,
+  student_user_id INTEGER NOT NULL,
+  parent_user_id INTEGER NOT NULL,
+  can_view_on_track INTEGER NOT NULL DEFAULT 1,
+  can_view_remaining_funding INTEGER NOT NULL DEFAULT 1,
+  can_view_total_funds INTEGER NOT NULL DEFAULT 0,
+  can_view_spending_breakdown INTEGER NOT NULL DEFAULT 0,
+  created_at TEXT NOT NULL DEFAULT (datetime('now')),
+  UNIQUE(student_user_id, parent_user_id),
+  FOREIGN KEY (student_user_id) REFERENCES users(id) ON DELETE CASCADE,
+  FOREIGN KEY (parent_user_id) REFERENCES users(id) ON DELETE CASCADE
 );

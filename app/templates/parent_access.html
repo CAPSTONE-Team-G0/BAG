@@ -1,0 +1,139 @@
+{% extends "base.html" %}
+{% block content %}
+
+<div class="card">
+  {% if session.get('user_role') == 'student' %}
+    <h2>Manage Parent Access</h2>
+    <p class="muted">
+      Link a parent or guardian account with view-only access. The parent must already have an account in the system.
+    </p>
+  {% elif session.get('user_role') == 'parent' %}
+    <h2>View Student Accounts</h2>
+    <p class="muted">
+      View the student accounts that have been shared with your parent account.
+    </p>
+  {% endif %}
+</div>
+
+{% if session.get('user_role') == 'student' %}
+<div class="grid2">
+  <div class="card">
+    <h3>Link a Parent Account</h3>
+
+    <form method="post">
+      <input type="hidden" name="action" value="add">
+
+      <label for="parent_email">Parent email</label>
+      <input
+        type="email"
+        name="parent_email"
+        id="parent_email"
+        placeholder="parent@example.com"
+        required
+      >
+
+      <div style="margin-top: 1rem;">
+        <label>
+          <input type="checkbox" name="can_view_on_track" checked>
+          Allow parent to view on-track status
+        </label>
+        <br>
+
+        <label>
+          <input type="checkbox" name="can_view_remaining_funding" checked>
+          Allow parent to view remaining funding
+        </label>
+        <br>
+
+        <label>
+          <input type="checkbox" name="can_view_total_funds">
+          Allow parent to view total funds
+        </label>
+        <br>
+
+        <label>
+          <input type="checkbox" name="can_view_spending_breakdown">
+          Allow parent to view spending breakdown
+        </label>
+      </div>
+
+      <div style="margin-top: 1rem;">
+        <button class="btn" type="submit">Save Parent Access</button>
+      </div>
+    </form>
+  </div>
+
+  <div class="card">
+    <h3>Parents Linked to My Account</h3>
+
+    {% if linked_parents|length == 0 %}
+      <p class="muted">No parents linked yet.</p>
+    {% else %}
+      <table class="table">
+        <thead>
+          <tr>
+            <th>Email</th>
+            <th>Permissions</th>
+            <th>Remove</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for p in linked_parents %}
+            <tr>
+              <td>{{ p.parent_email }}</td>
+              <td>
+                {% if p.can_view_on_track %}On-track {% endif %}
+                {% if p.can_view_remaining_funding %}Remaining {% endif %}
+                {% if p.can_view_total_funds %}Totals {% endif %}
+                {% if p.can_view_spending_breakdown %}Breakdown{% endif %}
+              </td>
+              <td>
+                <form method="post">
+                  <input type="hidden" name="action" value="remove">
+                  <input type="hidden" name="link_id" value="{{ p.id }}">
+                  <button class="btn secondary" type="submit">Remove</button>
+                </form>
+              </td>
+            </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    {% endif %}
+  </div>
+</div>
+{% endif %}
+
+{% if session.get('user_role') == 'parent' %}
+<div class="card">
+  <h3>Student Accounts I Can View</h3>
+
+  {% if parent_views|length == 0 %}
+    <p class="muted">No student accounts have been shared with you yet.</p>
+  {% else %}
+    <table class="table">
+      <thead>
+        <tr>
+          <th>Student</th>
+          <th>Email</th>
+          <th>Open</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for s in parent_views %}
+          <tr>
+            <td>{{ s.student_name or "Student" }}</td>
+            <td>{{ s.student_email }}</td>
+            <td>
+              <a class="btn" href="{{ url_for('parent_access.parent_view', student_id=s.student_user_id) }}">
+                View
+              </a>
+            </td>
+          </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  {% endif %}
+</div>
+{% endif %}
+
+{% endblock %}
