@@ -23,6 +23,7 @@
       <a href="{{ url_for('categories.categories') }}">Categories</a>
       <a href="{{ url_for('profile.profile') }}">Profile</a>
       <a href="{{ url_for('parent_access.parent_access') }}">Parent Access</a>
+      <a href="{{ url_for('faqs.faqs') }}">FAQs</a>
     {% endif %}
 
     {% if session.get('user_role') == 'parent' %}
