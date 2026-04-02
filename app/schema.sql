@@ -11,7 +11,10 @@ CREATE TABLE IF NOT EXISTS users (
 CREATE TABLE IF NOT EXISTS profiles (
   user_id INTEGER PRIMARY KEY,
   display_name TEXT,
+  state TEXT,
   school TEXT,
+  student_status TEXT,
+  profile_image TEXT,
   default_semester_weeks INTEGER NOT NULL DEFAULT 16,
   FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE
 );
