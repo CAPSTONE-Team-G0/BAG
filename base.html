@@ -1,0 +1,85 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Bag</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Work+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+  <div class="app-shell">
+
+    {% if session.get('user_id') %}
+    <aside class="sidebar">
+      <div class="sidebar-brand">
+        <div class="logo">Bag</div>
+        <div class="sidebar-tagline">FISCAL SANCTUARY</div>
+      </div>
+
+      <nav class="sidebar-nav">
+        {% if session.get('user_role') == 'student' %}
+          <a href="{{ url_for('dashboard.dashboard') }}" class="nav-link">Dashboard</a>
+          <a href="{{ url_for('semesters.semesters') }}" class="nav-link">Semesters</a>
+          <a href="{{ url_for('transactions.transaction_new') }}" class="nav-link">Add Transaction</a>
+          <a href="{{ url_for('aid.aid_new') }}" class="nav-link">Add Aid</a>
+          <a href="{{ url_for('categories.categories') }}" class="nav-link">Categories</a>
+          <a href="{{ url_for('profile.profile') }}" class="nav-link">Profile</a>
+          <a href="{{ url_for('parent_access.parent_access') }}" class="nav-link">Parent Access</a>
+          <a href="{{ url_for('faqs.faqs') }}" class="nav-link">FAQs</a>
+        {% endif %}
+
+        {% if session.get('user_role') == 'parent' %}
+          <a href="{{ url_for('parent_access.parent_access') }}" class="nav-link">View Student</a>
+        {% endif %}
+
+        <a href="{{ url_for('auth.logout') }}" class="nav-link">Logout</a>
+      </nav>
+
+      <div class="sidebar-plan">
+        <div class="sidebar-plan-label">Student Plan</div>
+        <div class="sidebar-plan-value">Premium Active</div>
+      </div>
+    </aside>
+    {% endif %}
+
+    <div class="app-main">
+      <header class="topbar">
+        
+
+        {% if session.get('user_id') %}
+        <div class="topbar-right">
+          <div class="topbar-user">
+            <div class="topbar-user-text">
+              <div class="topbar-user-name">Bag User</div>
+              
+            </div>
+            <div class="topbar-avatar">B</div>
+          </div>
+        </div>
+        {% endif %}
+      </header>
+
+      <main class="page-content">
+        {% with messages = get_flashed_messages() %}
+          {% if messages %}
+            <div class="flash">
+              {% for message in messages %}
+                <div class="flash-item">{{ message }}</div>
+              {% endfor %}
+            </div>
+          {% endif %}
+        {% endwith %}
+
+        {% block content %}{% endblock %}
+      </main>
+
+      <footer class="footer">
+        <small>Bag capstone prototype · Flask + SQLite</small>
+      </footer>
+    </div>
+  </div>
+</body>
+</html>
