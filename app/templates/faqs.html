@@ -3,64 +3,51 @@
 {% block title %}FAQs | BAG{% endblock %}
 
 {% block content %}
-<div class="container">
-  <div class="faq-screen">
-    <div class="faq-orb faq-orb-1"></div>
-    <div class="faq-orb faq-orb-2"></div>
-    <div class="faq-orb faq-orb-3"></div>
-    <div class="faq-orb faq-orb-4"></div>
+<div class="faq-page">
+  <div class="faq-hero card">
+    <p class="faq-eyebrow">Support</p>
+    <h1>Frequently Asked Questions</h1>
+    <p class="faq-hero-text">
+      Find quick answers about BAG, financial aid, military benefits, and where to get help.
+    </p>
+  </div>
 
-    <div class="faq-card">
-      <div class="faq-header">
-        <h1>Frequently Asked Questions</h1>
-        <p>
-          Our platform is built to help you work smarter, not harder.
-          It adapts to your needs and supports your goals.
-        </p>
+  <div class="faq-layout">
+    <aside class="faq-sidebar card">
+      <button class="faq-tab active" type="button" data-faq-target="about-bag">
+        <span>About BAG</span>
+      </button>
+
+      <button class="faq-tab" type="button" data-faq-target="financial-aid">
+        <span>Financial Aid Questions</span>
+      </button>
+
+      <button class="faq-tab" type="button" data-faq-target="military-benefits">
+        <span>Military Benefit Questions</span>
+      </button>
+
+      <button class="faq-tab" type="button" data-faq-target="help-section">
+        <span>Help</span>
+      </button>
+    </aside>
+
+    <section class="faq-content">
+      <div class="faq-panel active" id="about-bag">
+        {% include "faq_sections/about_bag.html" %}
       </div>
 
-      <div class="faq-shell">
-        <aside class="faq-sidebar">
-          <button class="faq-tab active" type="button" data-faq-target="about-bag">
-            About BAG
-            <span>&rsaquo;</span>
-          </button>
-
-          <button class="faq-tab" type="button" data-faq-target="financial-aid">
-            Financial Aid Questions
-            <span>&rsaquo;</span>
-          </button>
-
-          <button class="faq-tab" type="button" data-faq-target="military-benefits">
-            Military Benefit Questions
-            <span>&rsaquo;</span>
-          </button>
-
-          <button class="faq-tab" type="button" data-faq-target="help-section">
-            Help
-            <span>&rsaquo;</span>
-          </button>
-        </aside>
-
-        <section class="faq-content">
-          <div class="faq-panel active" id="about-bag">
-            {% include "faq_sections/about_bag.html" %}
-          </div>
-
-          <div class="faq-panel" id="financial-aid">
-            {% include "faq_sections/financial_aid.html" %}
-          </div>
-
-          <div class="faq-panel" id="military-benefits">
-            {% include "faq_sections/military_benefits.html" %}
-          </div>
-
-          <div class="faq-panel" id="help-section">
-            {% include "faq_sections/help.html" %}
-          </div>
-        </section>
+      <div class="faq-panel" id="financial-aid">
+        {% include "faq_sections/financial_aid.html" %}
       </div>
-    </div>
+
+      <div class="faq-panel" id="military-benefits">
+        {% include "faq_sections/military_benefits.html" %}
+      </div>
+
+      <div class="faq-panel" id="help-section">
+        {% include "faq_sections/help.html" %}
+      </div>
+    </section>
   </div>
 </div>
 
