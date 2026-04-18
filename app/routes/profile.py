@@ -1,5 +1,6 @@
 from flask import Blueprint, flash, redirect, render_template, request, url_for
 from app.auth import login_required
+from app.common.constants import US_STATE_ABBREVIATIONS, PROFILE_IMAGE_CHOICES
 from app.common.session_utils import current_user_id
 from app.db import get_db
 
@@ -15,8 +16,12 @@ def profile():
 
     if request.method == "POST":
         display_name = (request.form.get("display_name") or "").strip()
+        state = (request.form.get("state") or "").strip()
         school = (request.form.get("school") or "").strip()
+        student_status = (request.form.get("student_status") or "").strip()
+        profile_image = (request.form.get("profile_image") or "").strip()
         weeks = request.form.get("default_semester_weeks") or "16"
+
         try:
             weeks_i = int(weeks)
         except Exception:
@@ -24,15 +29,55 @@ def profile():
 
         if weeks_i < 8 or weeks_i > 26:
             flash("Default semester weeks must be between 8 and 26.")
-            return render_template("profile.html", profile=row)
+            return render_template(
+                "profile.html",
+                profile=row,
+                states=US_STATE_ABBREVIATIONS,
+                profile_image_choices=PROFILE_IMAGE_CHOICES,
+            )
+
+        if student_status not in ("", "Full-time", "Part-time"):
+            flash("Please choose a valid student status.")
+            return render_template(
+                "profile.html",
+                profile=row,
+                states=US_STATE_ABBREVIATIONS,
+                profile_image_choices=PROFILE_IMAGE_CHOICES,
+            )
+
+        allowed_images = set(PROFILE_IMAGE_CHOICES + [""])
+        if profile_image not in allowed_images:
+            profile_image = ""
 
         db.execute(
-            "INSERT INTO profiles (user_id, display_name, school, default_semester_weeks) VALUES (?, ?, ?, ?) "
-            "ON CONFLICT(user_id) DO UPDATE SET display_name=excluded.display_name, school=excluded.school, default_semester_weeks=excluded.default_semester_weeks",
-            (uid, display_name, school, weeks_i),
+            """
+            INSERT INTO profiles (
+                user_id,
+                display_name,
+                state,
+                school,
+                student_status,
+                profile_image,
+                default_semester_weeks
+            )
+            VALUES (?, ?, ?, ?, ?, ?, ?)
+            ON CONFLICT(user_id) DO UPDATE SET
+                display_name=excluded.display_name,
+                state=excluded.state,
+                school=excluded.school,
+                student_status=excluded.student_status,
+                profile_image=excluded.profile_image,
+                default_semester_weeks=excluded.default_semester_weeks
+            """,
+            (uid, display_name, state, school, student_status, profile_image, weeks_i),
         )
         db.commit()
         flash("Profile saved.")
-        return redirect(url_for("dashboard.dashboard"))
+        return redirect(url_for("profile.profile"))
 
-    return render_template("profile.html", profile=row)
+    return render_template(
+        "profile.html",
+        profile=row,
+        states=US_STATE_ABBREVIATIONS,
+        profile_image_choices=PROFILE_IMAGE_CHOICES,
+    )

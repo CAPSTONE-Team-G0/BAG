@@ -1,23 +1,193 @@
 {% extends "base.html" %}
 {% block content %}
-<div class="card">
-  <h2>Profile</h2>
-  <form method="post" class="form grid">
-    <div>
-      <label>Display name</label>
-      <input name="display_name" value="{{ profile.display_name if profile else '' }}" placeholder="Joey">
+<div class="card profile-card">
+  <form method="post" class="profile-layout">
+    <div class="profile-left">
+      <div class="profile-photo-circle" id="profile-photo-preview">
+        {% if profile and profile.profile_image %}
+          <img
+            src="{{ url_for('static', filename='images/' + profile.profile_image) }}"
+            alt="Profile photo"
+          >
+        {% else %}
+          <span>PFP</span>
+        {% endif %}
+      </div>
+
+      <div class="profile-settings-panel">
+        <h3>Profile Settings</h3>
+        <button
+          type="button"
+          class="btn secondary profile-side-btn"
+          id="open-photo-modal-btn"
+        >
+          Change Photo
+        </button>
+      </div>
     </div>
-    <div>
-      <label>School (optional)</label>
-      <input name="school" value="{{ profile.school if profile else '' }}" placeholder="My College">
+
+    <div class="profile-right">
+      <h2>Profile</h2>
+
+      <div class="profile-fields">
+        <div class="field-block">
+          <label for="display_name">Display Name</label>
+          <input
+            id="display_name"
+            name="display_name"
+            value="{{ profile.display_name if profile else '' }}"
+            placeholder="What should we call you?"
+          >
+        </div>
+
+        <div class="field-block">
+          <label for="state">State</label>
+          <select id="state" name="state">
+            <option value="">Select state</option>
+            {% for s in states %}
+              <option value="{{ s }}" {% if profile and profile.state == s %}selected{% endif %}>
+                {{ s }}
+              </option>
+            {% endfor %}
+          </select>
+        </div>
+
+        <div class="field-block">
+          <label for="school">School</label>
+          <input
+            id="school"
+            name="school"
+            value="{{ profile.school if profile else '' }}"
+            placeholder="Where do you go to school?"
+          >
+        </div>
+
+        <div class="field-block">
+          <label for="student_status">Student Status</label>
+          <select id="student_status" name="student_status">
+            <option value="">Select status</option>
+            <option value="Full-time" {% if profile and profile.student_status == "Full-time" %}selected{% endif %}>
+              Full-time
+            </option>
+            <option value="Part-time" {% if profile and profile.student_status == "Part-time" %}selected{% endif %}>
+              Part-time
+            </option>
+          </select>
+        </div>
+
+        <div class="field-block full">
+          <label for="default_semester_weeks">Default Semester Weeks</label>
+          <input
+            type="number"
+            id="default_semester_weeks"
+            name="default_semester_weeks"
+            min="8"
+            max="26"
+            value="{{ profile.default_semester_weeks if profile else 16 }}"
+          >
+        </div>
+
+        <div class="full">
+          <button class="btn" type="submit">Save Profile</button>
+        </div>
+      </div>
     </div>
-    <div>
-      <label>Default semester weeks</label>
-      <input type="number" name="default_semester_weeks" min="8" max="26" value="{{ profile.default_semester_weeks if profile else 16 }}">
-    </div>
-    <div class="full">
-      <button class="btn" type="submit">Save Profile</button>
-    </div>
+
+    <input
+      type="hidden"
+      name="profile_image"
+      id="profile_image"
+      value="{{ profile.profile_image if profile and profile.profile_image else '' }}"
+    >
   </form>
 </div>
+
+<div class="photo-modal" id="photo-modal" aria-hidden="true">
+  <div class="photo-modal-content">
+    <h3>Choose a Profile Photo</h3>
+
+    <div class="photo-choice-grid">
+      {% for image_name in profile_image_choices %}
+        <button
+          type="button"
+          class="photo-choice {% if profile and profile.profile_image == image_name %}selected{% endif %}"
+          data-image="{{ image_name }}"
+        >
+          <img
+            src="{{ url_for('static', filename='images/' + image_name) }}"
+            alt="{{ image_name }}"
+          >
+        </button>
+      {% endfor %}
+    </div>
+
+    <div class="photo-modal-actions">
+      <button type="button" class="btn secondary" id="cancel-photo-btn">Cancel</button>
+      <button type="button" class="btn" id="save-photo-btn">Save</button>
+    </div>
+  </div>
+</div>
+
+<script>
+  (function () {
+    const modal = document.getElementById("photo-modal");
+    const openBtn = document.getElementById("open-photo-modal-btn");
+    const cancelBtn = document.getElementById("cancel-photo-btn");
+    const saveBtn = document.getElementById("save-photo-btn");
+    const hiddenInput = document.getElementById("profile_image");
+    const preview = document.getElementById("profile-photo-preview");
+    const choices = document.querySelectorAll(".photo-choice");
+
+    let pendingImage = hiddenInput.value || "";
+
+    function openModal() {
+      modal.classList.add("is-open");
+      modal.setAttribute("aria-hidden", "false");
+      syncSelectedState();
+    }
+
+    function closeModal() {
+      modal.classList.remove("is-open");
+      modal.setAttribute("aria-hidden", "true");
+    }
+
+    function syncSelectedState() {
+      choices.forEach((choice) => {
+        const imageName = choice.dataset.image;
+        if (imageName === pendingImage) {
+          choice.classList.add("selected");
+        } else {
+          choice.classList.remove("selected");
+        }
+      });
+    }
+
+    function updatePreview(filename) {
+      preview.innerHTML = '<img src="/static/images/' + filename + '" alt="Profile photo">';
+    }
+
+    openBtn.addEventListener("click", openModal);
+    cancelBtn.addEventListener("click", closeModal);
+
+    modal.addEventListener("click", function (event) {
+      if (event.target === modal) {
+        closeModal();
+      }
+    });
+
+    choices.forEach((choice) => {
+      choice.addEventListener("click", function () {
+        pendingImage = choice.dataset.image;
+        syncSelectedState();
+      });
+    });
+
+    saveBtn.addEventListener("click", function () {
+      if (!pendingImage) return;
+      hiddenInput.value = pendingImage;
+      updatePreview(pendingImage);
+      closeModal();
+    });
+  })();
+</script>
 {% endblock %}
