@@ -26,7 +26,9 @@ def transaction_new():
         ttype = (request.form.get("type") or "expense").strip()
         amount = money_to_cents(request.form.get("amount") or "")
         tdate = (request.form.get("date") or "").strip()
+        
         category_id = request.form.get("category_id") or None
+        new_category = (request.form.get("new_category") or "").strip()
         note = (request.form.get("note") or "").strip()
 
         if ttype not in ("income", "expense"):
@@ -45,10 +47,29 @@ def transaction_new():
             return render_template("transaction_new.html", categories=cats, today=date.today().isoformat())
 
         cat_id = None
-        if category_id:
+
+        if new_category:
+            db.execute(
+                "INSERT OR IGNORE INTO categories (user_id, name) VALUES (?, ?)",
+                (uid, new_category),
+            )
+            db.commit()
+
+            created_cat = db.execute(
+                "SELECT id FROM categories WHERE user_id = ? AND name = ?",
+                (uid, new_category),
+            ).fetchone()
+
+            if created_cat:
+                cat_id = created_cat["id"]
+
+        elif category_id:
             try:
                 cid = int(category_id)
-                ok = db.execute("SELECT id FROM categories WHERE id = ? AND user_id = ?", (cid, uid)).fetchone()
+                ok = db.execute(
+                    "SELECT id FROM categories WHERE id = ? AND user_id = ?",
+                    (cid, uid)
+                ).fetchone()
                 if ok:
                     cat_id = cid
             except Exception:

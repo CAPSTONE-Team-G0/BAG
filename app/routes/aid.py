@@ -24,8 +24,8 @@ def aid_new():
         amount = money_to_cents(request.form.get("amount") or "")
         disb = (request.form.get("disbursement_date") or "").strip()
 
-        if amount is None:
-            flash("Amount must be a non-negative number.")
+        if amount is None or amount == 0:
+            flash("Amount must be greater than 0.")
             return render_template("aid_new.html")
         if not disb:
             flash("Disbursement date is required.")
@@ -46,7 +46,7 @@ def aid_new():
             (sid, source_type, label, amount, disb),
         )
         db.commit()
-        flash("Aid saved.")
+        flash("Funds saved.")
         return redirect(url_for("dashboard.dashboard"))
 
     return render_template("aid_new.html")

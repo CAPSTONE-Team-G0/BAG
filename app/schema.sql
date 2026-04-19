@@ -53,6 +53,18 @@ CREATE TABLE IF NOT EXISTS categories (
   FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE
 );
 
+-- CATEGORY BUDGETS (per user, per category)
+CREATE TABLE IF NOT EXISTS category_budgets (
+  id INTEGER PRIMARY KEY AUTOINCREMENT,
+  user_id INTEGER NOT NULL,
+  category_id INTEGER NOT NULL,
+  budget_cents INTEGER NOT NULL CHECK (budget_cents >= 0),
+  created_at TEXT NOT NULL DEFAULT (datetime('now')),
+  UNIQUE(user_id, category_id),
+  FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE,
+  FOREIGN KEY (category_id) REFERENCES categories(id) ON DELETE CASCADE
+);
+
 -- TRANSACTIONS (income + expense)
 CREATE TABLE IF NOT EXISTS transactions (
   id INTEGER PRIMARY KEY AUTOINCREMENT,

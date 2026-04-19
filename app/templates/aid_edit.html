@@ -1,0 +1,52 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="card">
+  <h2>Edit Funding</h2>
+
+  <form method="post" class="form grid">
+    <div>
+      <label>Select a source type</label>
+      <select name="source_type" required>
+        <option value="Income" {% if aid.source_type == 'Income' %}selected{% endif %}>Income</option>
+        <option value="FAFSA" {% if aid.source_type == 'FAFSA' %}selected{% endif %}>FAFSA</option>
+        <option value="GI_Bill" {% if aid.source_type == 'GI_Bill' %}selected{% endif %}>GI_Bill</option>
+        <option value="Scholarship" {% if aid.source_type == 'Scholarship' %}selected{% endif %}>Scholarship</option>
+        <option value="Loan" {% if aid.source_type == 'Loan' %}selected{% endif %}>Loan</option>
+        <option value="Savings" {% if aid.source_type == 'Savings' %}selected{% endif %}>Savings</option>
+        <option value="Other" {% if aid.source_type == 'Other' %}selected{% endif %}>Other</option>
+      </select>
+    </div>
+
+    <div class="full">
+      <label>Label</label>
+      <input name="label" value="{{ aid.label or '' }}">
+      <div class="hint">Required if you select "Other"</div>
+    </div>
+
+    <div>
+      <label>Amount ($)</label>
+      <input
+        type="number"
+        step="0.01"
+        min="0.01"
+        name="amount"
+        value="{{ '%.2f'|format(aid.amount_cents / 100) }}"
+        required
+      >
+    </div>
+
+    <div>
+      <label>Disbursement date</label>
+      <input type="date" name="disbursement_date" value="{{ aid.disbursement_date }}" required>
+    </div>
+
+    <div class="full">
+      <button class="btn" type="submit">Save Changes</button>
+    </div>
+  </form>
+
+  <form method="post" action="{{ url_for('core.aid_delete', aid_id=aid.id) }}">
+    <button class="btn secondary" type="submit">Delete Funding</button>
+  </form>
+</div>
+{% endblock %}

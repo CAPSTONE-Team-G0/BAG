@@ -1,13 +1,12 @@
 {% extends "base.html" %}
 {% block content %}
 <div class="card">
-  <h2>Add Transaction</h2>
+  <h2>Add Expense</h2>
   <form method="post" class="form grid">
     <div>
       <label>Type</label>
       <select name="type">
         <option value="expense">Expense</option>
-        <option value="income">Income</option>
       </select>
     </div>
     <div>
@@ -29,11 +28,16 @@
       <div class="hint">Income can leave category blank.</div>
     </div>
     <div class="full">
+  <label>Add New Category (optional)</label>
+  <input name="new_category" placeholder="Create a custom category here">
+  <div class="hint">If you enter a new category here, it will be used for this transaction.</div>
+</div>
+    <div class="full">
       <label>Note (optional)</label>
       <input name="note" placeholder="Groceries, gas, rent, etc.">
     </div>
     <div class="full">
-      <button class="btn" type="submit">Save Transaction</button>
+      <button class="btn" type="submit">Save Expense</button>
     </div>
   </form>
 </div>
