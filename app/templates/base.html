@@ -23,9 +23,9 @@
         {% if session.get('user_role') == 'student' %}
           <a href="{{ url_for('dashboard.dashboard') }}" class="nav-link">Dashboard</a>
           <a href="{{ url_for('semesters.semesters') }}" class="nav-link">Semesters</a>
-          <a href="{{ url_for('transactions.transaction_new') }}" class="nav-link">Add Transaction</a>
-          <a href="{{ url_for('aid.aid_new') }}" class="nav-link">Add Aid</a>
-          <a href="{{ url_for('categories.categories') }}" class="nav-link">Categories</a>
+          <a href="{{ url_for('aid.aid_new') }}" class="nav-link">Add Funds</a>
+          <a href="{{ url_for('transactions.transaction_new') }}" class="nav-link">Add Expense</a>
+          <a href="{{ url_for('categories.categories') }}" class="nav-link">Budgeting</a>
           <a href="{{ url_for('profile.profile') }}" class="nav-link">Profile</a>
           <a href="{{ url_for('parent_access.parent_access') }}" class="nav-link">Parent Access</a>
           <a href="{{ url_for('faqs.faqs') }}" class="nav-link">FAQs</a>

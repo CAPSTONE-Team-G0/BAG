@@ -1,11 +1,12 @@
 {% extends "base.html" %}
 {% block content %}
 <div class="card">
-  <h2>Add Aid (Lump Sum)</h2>
+  <h2>Add Funds </h2>
   <form method="post" class="form grid">
     <div>
-      <label>Source type</label>
+      <label>Select a source type</label>
       <select name="source_type">
+        <option>Income</option>
         <option>FAFSA</option>
         <option>GI_Bill</option>
         <option>Scholarship</option>
@@ -20,14 +21,14 @@
     </div>
     <div>
       <label>Amount ($)</label>
-      <input type="number" step="0.01" min="0" name="amount" required>
+      <input type="number" step="0.01" min="0.01" name="amount" required>
     </div>
     <div>
       <label>Disbursement date</label>
       <input type="date" name="disbursement_date" required>
     </div>
     <div class="full">
-      <button class="btn" type="submit">Save Aid</button>
+      <button class="btn" type="submit">Save Funds</button>
     </div>
   </form>
 </div>
