@@ -37,13 +37,13 @@ Merged Mattea branch to main
 * DONE Move current "categories" tab feature, which allows you to create custom categories, to the add transaction feature as opposed to having its own tab
 * Clearer organization for money spent/money earned on dashboard. Original stitch layout should be 
 * Semesters that have already passed should be put in a archived section below the active semester.
-* Ability to delete a semester
+* DONE Ability to delete a semester
 * DONE Active should only show on a semester that is currently in its date range (future and past semesters cannot be active)  
-* Semesters in archive should display in chronological order
+* DONE Semesters in archive should display in REVERSE chronological order
 * When logging in to a registered account, dashboard doesn't show up until you select a semester, this is confusing. Whatever semester is active should automatically populate the dashboard page
 * Add salary source type to Funds tab
 * Change "disbursement date" to just "date" on Add Aid tab
-* in Add Aid tab, shouldn't allow user to enter 0$
+* DONE in Add Aid tab, shouldn't allow user to enter 0$
 * FAQ still needs updated to actual info, still using placeholder AI text and coming soon pages.
 * Loffert needs to finish the copy for popup/alert messages and send them to Mattea
 
