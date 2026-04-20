@@ -3,28 +3,48 @@
 <div class="card">
   <div class="row">
     <h2>Semesters</h2>
-    <a class="btn secondary" href="{{ url_for('semesters.semester_new') }}">+ New Semester</a>
+    <a class="btn secondary" href="{{ url_for('core.semester_new') }}">+ New Semester</a>
   </div>
+
+  <p class="muted">Today's date: [{{ today }}]</p>
 
   {% if semesters|length == 0 %}
     <p class="muted">No semesters yet. Create one to start.</p>
   {% else %}
     <table class="table">
       <thead>
-        <tr><th>Name</th><th>Dates</th><th>Weeks</th><th></th></tr>
+        <tr>
+          <th>Name</th>
+          <th>Dates</th>
+          <th>Weeks</th>
+          <th>Actions</th>
+        </tr>
       </thead>
+
       <tbody>
-        {% for s in semesters %}
+        {% for s in semesters|sort(attribute='end_date', reverse=True)|sort(attribute='start_date', reverse=True) %}
           <tr>
             <td>
-              {% if s.id == active_semester_id %}
+              {% if s.is_active %}
                 <span class="pill green">Active</span>
               {% endif %}
               <strong>{{ s.name }}</strong>
             </td>
+
             <td>{{ s.start_date }} → {{ s.end_date }}</td>
             <td>{{ s.weeks }}</td>
-            <td><a class="link" href="{{ url_for('semesters.semester_select', semester_id=s.id) }}">Select</a></td>
+
+            <td>
+              <a class="link" href="{{ url_for('core.semester_edit', semester_id=s.id) }}">Edit</a>
+
+              <form method="post"
+                    action="{{ url_for('core.semester_delete', semester_id=s.id) }}"
+                    style="display:inline;">
+                <button type="submit">Delete</button>
+              </form>
+
+              <a class="link" href="{{ url_for('core.semester_select', semester_id=s.id) }}">Select</a>
+            </td>
           </tr>
         {% endfor %}
       </tbody>
@@ -32,7 +52,7 @@
   {% endif %}
 
   {% if not profile %}
-    <p class="muted">Create a <a href="{{ url_for('profile.profile') }}">Profile</a>! </p>
+    <p class="muted">Create a <a href="{{ url_for('core.profile') }}">Profile</a>!</p>
   {% endif %}
 </div>
 {% endblock %}

@@ -1,6 +1,7 @@
+from datetime import date
 from flask import Blueprint, flash, redirect, render_template, request, session, url_for
 from app.auth import login_required
-from app.common.session_utils import active_semester_id, current_user_id
+from app.common.session_utils import current_user_id
 from app.db import get_db
 from app.services.semester_service import normalize_weeks, validate_semester_dates
 
@@ -13,9 +14,27 @@ def semesters():
     db = get_db()
     uid = current_user_id()
     prof = db.execute("SELECT * FROM profiles WHERE user_id = ?", (uid,)).fetchone()
-    sems = db.execute("SELECT * FROM semesters WHERE user_id = ? ORDER BY created_at DESC", (uid,)).fetchall()
-    active = active_semester_id()
-    return render_template("semesters.html", semesters=sems, active_semester_id=active, profile=prof)
+
+    sems = db.execute(
+        "SELECT * FROM semesters WHERE user_id = ?",
+        (uid,)
+    ).fetchall()
+
+    today = date.today().isoformat()
+    active_id = None
+
+    for sem in sems:
+        if sem["start_date"] <= today <= sem["end_date"]:
+            active_id = sem["id"]
+            break
+
+    return render_template(
+        "semesters.html",
+        semesters=sems,
+        active_semester_id=active_id,
+        profile=prof,
+        today=today
+    )
 
 
 @bp.route("/semester/new", methods=["GET", "POST"])
