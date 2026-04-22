@@ -53,6 +53,18 @@ CREATE TABLE IF NOT EXISTS categories (
   FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE
 );
 
+-- CATEGORY BUDGETS (per user, per category)
+CREATE TABLE IF NOT EXISTS category_budgets (
+  id INTEGER PRIMARY KEY AUTOINCREMENT,
+  user_id INTEGER NOT NULL,
+  category_id INTEGER NOT NULL,
+  budget_cents INTEGER NOT NULL CHECK (budget_cents >= 0),
+  created_at TEXT NOT NULL DEFAULT (datetime('now')),
+  UNIQUE(user_id, category_id),
+  FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE,
+  FOREIGN KEY (category_id) REFERENCES categories(id) ON DELETE CASCADE
+);
+
 -- TRANSACTIONS (income + expense)
 CREATE TABLE IF NOT EXISTS transactions (
   id INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -82,4 +94,22 @@ CREATE TABLE IF NOT EXISTS parent_links (
   UNIQUE(student_user_id, parent_user_id),
   FOREIGN KEY (student_user_id) REFERENCES users(id) ON DELETE CASCADE,
   FOREIGN KEY (parent_user_id) REFERENCES users(id) ON DELETE CASCADE
+);
+
+-- BUDGET GOALS (per user, per semester, tracks expense spending)
+CREATE TABLE IF NOT EXISTS budget_goals (
+  id INTEGER PRIMARY KEY AUTOINCREMENT,
+  user_id INTEGER NOT NULL,
+  semester_id INTEGER NOT NULL,
+  category_id INTEGER NOT NULL,
+  duration TEXT NOT NULL CHECK (duration IN ('weekly', 'monthly', 'semester')),
+  goal_cents INTEGER NOT NULL CHECK (goal_cents > 0),
+  start_date TEXT NOT NULL,
+  end_date TEXT NOT NULL,
+  is_active INTEGER NOT NULL DEFAULT 1,
+  created_at TEXT NOT NULL DEFAULT (datetime('now')),
+  updated_at TEXT NOT NULL DEFAULT (datetime('now')),
+  FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE,
+  FOREIGN KEY (semester_id) REFERENCES semesters(id) ON DELETE CASCADE,
+  FOREIGN KEY (category_id) REFERENCES categories(id) ON DELETE CASCADE
 );

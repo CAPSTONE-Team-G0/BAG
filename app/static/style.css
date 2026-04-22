@@ -928,3 +928,140 @@ input::placeholder, textarea::placeholder{
     grid-template-columns:1fr;
   }
 }
+
+/* Budgeting */
+.budgeting-card .card{ box-shadow:none; }
+.budgeting-header-row{ margin-bottom: 8px; }
+.budgeting-semester-label{ margin-top: 8px; }
+.budgeting-message{ margin: 18px 0; }
+.budget-empty-state{ margin-top: 24px; }
+.budget-add-card{
+  width: 100%;
+  min-height: 180px;
+  border: 2px dashed var(--line);
+  border-radius: 22px;
+  background: #fff;
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  justify-content:center;
+  gap:10px;
+  cursor:pointer;
+  padding:24px;
+}
+.budget-add-plus{ font-size: 38px; font-weight: 700; color: var(--accent); line-height:1; }
+.budget-add-title{ font-family:"Plus Jakarta Sans", system-ui, sans-serif; font-size: 20px; font-weight: 700; color: var(--primary); }
+.budget-add-text{ color: var(--muted); text-align:center; max-width: 420px; }
+.budget-form-card{ margin-top: 24px; }
+.budget-goals-grid{
+  margin-top: 24px;
+  display:grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 20px;
+}
+.budget-goal-tile{
+  background: #f1ecf2;
+  border-radius: 22px;
+  padding: 18px;
+}
+.budget-goal-top{ display:flex; align-items:flex-start; justify-content:space-between; gap:12px; margin-bottom: 16px; }
+.budget-goal-icon {
+  width: 44px;
+  height: 44px;
+  border-radius: 14px;
+  background: #ffffff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  padding: 8px;
+}
+
+.budget-goal-icon img {
+  width: 24px;
+  height: 24px;
+  object-fit: contain;
+  display: block;
+}
+.budget-goal-status{ font-family:"Plus Jakarta Sans", system-ui, sans-serif; font-size: 12px; font-weight: 800; letter-spacing: .04em; }
+.budget-goal-status.green{ color: var(--green-dark); }
+.budget-goal-status.blue{ color: #4d7cff; }
+.budget-goal-status.red{ color: var(--danger); }
+.budget-goal-name{ font-family:"Plus Jakarta Sans", system-ui, sans-serif; font-size: 28px; font-weight: 800; line-height:1.1; margin-bottom: 6px; }
+.budget-goal-subtitle{ color: var(--muted); margin-bottom: 18px; }
+.budget-goal-meta-row{ display:flex; justify-content:space-between; gap:12px; font-size: 14px; color: var(--muted); margin-bottom: 10px; }
+.budget-progress{ height: 8px; background:#ddd7df; border-radius:999px; overflow:hidden; margin: 12px 0 16px; }
+.budget-progress-bar{ height:100%; border-radius:999px; }
+.budget-progress-bar.green{ background: var(--green); }
+.budget-progress-bar.blue{ background: #4d7cff; }
+.budget-progress-bar.red{ background: #d72638; }
+.budget-goal-dates{ font-size: 12px; color: var(--muted); }
+.budget-danger{ color: var(--danger); font-weight:700; }
+.btn.ghost{ background: transparent; border: 1px solid var(--line); color: var(--primary); }
+.pill{ display:inline-flex; align-items:center; padding:6px 10px; border-radius:999px; background: #ece7ee; font-size:12px; font-weight:700; }
+.pill.green{ background:#e8f3d3; color: var(--green-dark); }
+.table{ width:100%; border-collapse: collapse; margin-top: 18px; }
+.table th, .table td{ text-align:left; padding: 12px 10px; border-bottom: 1px solid var(--line); }
+
+.budget-goal-form-card.is-hidden {
+  display: none;
+}
+
+.budget-form-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+}
+
+.topbar-avatar-image {
+  overflow: hidden;
+  padding: 0;
+}
+
+.topbar-avatar-image img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: 50%;
+  display: block;
+}
+
+/* =========================
+   table actions (semesters)
+========================= */
+
+.table-actions{
+  white-space: nowrap;
+}
+
+.inline-form{
+  display:inline;
+  margin:0;
+  padding:0;
+}
+
+.action-link{
+  display:inline;
+  background:none;
+  border:none;
+  padding:0;
+  margin:0 10px 0 0;
+  font:inherit;
+  font-size:14px;
+  font-weight:500;
+  color:var(--accent);
+  cursor:pointer;
+  text-decoration:none;
+  box-shadow:none;
+  border-radius:0;
+  appearance:none;
+  -webkit-appearance:none;
+}
+
+.action-link:hover{
+  text-decoration:underline;
+}
+
+.delete-link{
+  color:var(--danger);
+}

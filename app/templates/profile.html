@@ -1,14 +1,21 @@
 {% extends "base.html" %}
 {% block content %}
 <div class="card profile-card">
-  <form method="post" class="profile-layout">
+  <form method="post" class="profile-layout" enctype="multipart/form-data" id="profile-form">
     <div class="profile-left">
       <div class="profile-photo-circle" id="profile-photo-preview">
         {% if profile and profile.profile_image %}
-          <img
-            src="{{ url_for('static', filename='images/' + profile.profile_image) }}"
-            alt="Profile photo"
-          >
+          {% if profile.profile_image.startswith('uploads/') %}
+            <img
+              src="{{ url_for('static', filename=profile.profile_image) }}"
+              alt="Profile photo"
+            >
+          {% else %}
+            <img
+              src="{{ url_for('static', filename='images/logos/' + profile.profile_image) }}"
+              alt="Profile photo"
+            >
+          {% endif %}
         {% else %}
           <span>PFP</span>
         {% endif %}
@@ -16,6 +23,7 @@
 
       <div class="profile-settings-panel">
         <h3>Profile Settings</h3>
+
         <button
           type="button"
           class="btn secondary profile-side-btn"
@@ -23,10 +31,18 @@
         >
           Change Photo
         </button>
+
+        <button
+          type="button"
+          class="btn secondary profile-side-btn"
+          id="edit-profile-btn"
+        >
+          Edit Profile
+        </button>
       </div>
     </div>
 
-    <div class="profile-right">
+    <div class="profile-right" id="profile-edit-fields">
       <h2>Profile</h2>
 
       <div class="profile-fields">
@@ -35,14 +51,21 @@
           <input
             id="display_name"
             name="display_name"
+            class="profile-input"
             value="{{ profile.display_name if profile else '' }}"
             placeholder="What should we call you?"
+            disabled
           >
         </div>
 
         <div class="field-block">
           <label for="state">State</label>
-          <select id="state" name="state">
+          <select
+            id="state"
+            name="state"
+            class="profile-input"
+            disabled
+          >
             <option value="">Select state</option>
             {% for s in states %}
               <option value="{{ s }}" {% if profile and profile.state == s %}selected{% endif %}>
@@ -57,14 +80,21 @@
           <input
             id="school"
             name="school"
+            class="profile-input"
             value="{{ profile.school if profile else '' }}"
             placeholder="Where do you go to school?"
+            disabled
           >
         </div>
 
         <div class="field-block">
           <label for="student_status">Student Status</label>
-          <select id="student_status" name="student_status">
+          <select
+            id="student_status"
+            name="student_status"
+            class="profile-input"
+            disabled
+          >
             <option value="">Select status</option>
             <option value="Full-time" {% if profile and profile.student_status == "Full-time" %}selected{% endif %}>
               Full-time
@@ -81,14 +111,23 @@
             type="number"
             id="default_semester_weeks"
             name="default_semester_weeks"
+            class="profile-input"
             min="8"
             max="26"
             value="{{ profile.default_semester_weeks if profile else 16 }}"
+            disabled
           >
         </div>
 
         <div class="full">
-          <button class="btn" type="submit">Save Profile</button>
+          <button
+            class="btn"
+            type="submit"
+            id="save-profile-btn"
+            style="display:none;"
+          >
+            Save Profile
+          </button>
         </div>
       </div>
     </div>
@@ -114,11 +153,21 @@
           data-image="{{ image_name }}"
         >
           <img
-            src="{{ url_for('static', filename='images/' + image_name) }}"
+            src="{{ url_for('static', filename='images/logos/' + image_name) }}"
             alt="{{ image_name }}"
           >
         </button>
       {% endfor %}
+    </div>
+
+    <div class="custom-upload-block">
+      <label for="custom_profile_photo" class="custom-upload-label">Or upload your own photo</label>
+      <input
+        type="file"
+        id="custom_profile_photo"
+        name="custom_profile_photo"
+        accept=".png,.jpg,.jpeg,.gif,.webp"
+      >
     </div>
 
     <div class="photo-modal-actions">
@@ -133,12 +182,19 @@
     const modal = document.getElementById("photo-modal");
     const openBtn = document.getElementById("open-photo-modal-btn");
     const cancelBtn = document.getElementById("cancel-photo-btn");
-    const saveBtn = document.getElementById("save-photo-btn");
+    const savePhotoBtn = document.getElementById("save-photo-btn");
     const hiddenInput = document.getElementById("profile_image");
     const preview = document.getElementById("profile-photo-preview");
     const choices = document.querySelectorAll(".photo-choice");
+    const uploadInput = document.getElementById("custom_profile_photo");
+    const profileForm = document.getElementById("profile-form");
+
+    const editBtn = document.getElementById("edit-profile-btn");
+    const saveProfileBtn = document.getElementById("save-profile-btn");
+    const inputs = document.querySelectorAll(".profile-input");
 
     let pendingImage = hiddenInput.value || "";
+    let isEditing = false;
 
     function openModal() {
       modal.classList.add("is-open");
@@ -162,8 +218,32 @@
       });
     }
 
-    function updatePreview(filename) {
-      preview.innerHTML = '<img src="/static/images/' + filename + '" alt="Profile photo">';
+    function updatePreviewFromPreset(filename) {
+      preview.innerHTML = '<img src="/static/images/logos/' + filename + '" alt="Profile photo">';
+    }
+
+    function updatePreviewFromUpload(file) {
+      const reader = new FileReader();
+      reader.onload = function (e) {
+        preview.innerHTML = '<img src="' + e.target.result + '" alt="Profile photo">';
+      };
+      reader.readAsDataURL(file);
+    }
+
+    function setEditMode(enabled) {
+      isEditing = enabled;
+
+      inputs.forEach((input) => {
+        input.disabled = !enabled;
+      });
+
+      if (enabled) {
+        saveProfileBtn.style.display = "inline-flex";
+        editBtn.textContent = "Cancel Editing";
+      } else {
+        saveProfileBtn.style.display = "none";
+        editBtn.textContent = "Edit Profile";
+      }
     }
 
     openBtn.addEventListener("click", openModal);
@@ -178,16 +258,46 @@
     choices.forEach((choice) => {
       choice.addEventListener("click", function () {
         pendingImage = choice.dataset.image;
+        uploadInput.value = "";
         syncSelectedState();
       });
     });
 
-    saveBtn.addEventListener("click", function () {
-      if (!pendingImage) return;
-      hiddenInput.value = pendingImage;
-      updatePreview(pendingImage);
+    savePhotoBtn.addEventListener("click", function () {
+      // preset selected
+      if (pendingImage && !(uploadInput.files && uploadInput.files[0])) {
+        hiddenInput.value = pendingImage;
+        updatePreviewFromPreset(pendingImage);
+      }
+
+      // uploaded file selected
+      if (uploadInput.files && uploadInput.files[0]) {
+        hiddenInput.value = "";
+        updatePreviewFromUpload(uploadInput.files[0]);
+      }
+
       closeModal();
+
+      // submit form immediately so photo is actually saved to DB
+      profileForm.submit();
     });
+
+    editBtn.addEventListener("click", function () {
+      if (isEditing) {
+        window.location.reload();
+      } else {
+        setEditMode(true);
+      }
+    });
+
+    // enable disabled fields before submit
+    profileForm.addEventListener("submit", function () {
+      document.querySelectorAll(".profile-input").forEach(input => {
+        input.disabled = false;
+      });
+    });
+
+    setEditMode(false);
   })();
 </script>
 {% endblock %}

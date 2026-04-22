@@ -15,33 +15,69 @@
     {% if session.get('user_id') %}
     <aside class="sidebar">
       <div class="sidebar-brand">
-        <div class="logo">Bag</div>
-        <div class="sidebar-tagline">FISCAL SANCTUARY</div>
+        <div class="logo">BAG</div>
+        <div class="sidebar-tagline">SECURE YOUR BAG.</div>
       </div>
 
       <nav class="sidebar-nav">
-        {% if session.get('user_role') == 'student' %}
-          <a href="{{ url_for('dashboard.dashboard') }}" class="nav-link">Dashboard</a>
-          <a href="{{ url_for('semesters.semesters') }}" class="nav-link">Semesters</a>
-          <a href="{{ url_for('transactions.transaction_new') }}" class="nav-link">Add Transaction</a>
-          <a href="{{ url_for('aid.aid_new') }}" class="nav-link">Add Aid</a>
-          <a href="{{ url_for('categories.categories') }}" class="nav-link">Categories</a>
-          <a href="{{ url_for('profile.profile') }}" class="nav-link">Profile</a>
-          <a href="{{ url_for('parent_access.parent_access') }}" class="nav-link">Parent Access</a>
-          <a href="{{ url_for('faqs.faqs') }}" class="nav-link">FAQs</a>
-        {% endif %}
+  {% if session.get('user_role') == 'student' %}
 
-        {% if session.get('user_role') == 'parent' %}
-          <a href="{{ url_for('parent_access.parent_access') }}" class="nav-link">View Student</a>
-        {% endif %}
+    <a href="{{ url_for('dashboard.dashboard') }}" class="nav-link">
+      <img src="{{ url_for('static', filename='images/icons/dashboardicon.png') }}" class="nav-icon">
+      <span>Dashboard</span>
+    </a>
 
-        <a href="{{ url_for('auth.logout') }}" class="nav-link">Logout</a>
-      </nav>
+    <a href="{{ url_for('semesters.semesters') }}" class="nav-link">
+      <img src="{{ url_for('static', filename='images/icons/calendaricon.png') }}" class="nav-icon">
+      <span>Semesters</span>
+    </a>
 
-      <div class="sidebar-plan">
-        <div class="sidebar-plan-label">Student Plan</div>
-        <div class="sidebar-plan-value">Premium Active</div>
-      </div>
+    <a href="{{ url_for('aid.aid_new') }}" class="nav-link">
+      <img src="{{ url_for('static', filename='images/icons/fundsicon.png') }}" class="nav-icon">
+      <span>Add Funds</span>
+    </a>
+
+    <a href="{{ url_for('transactions.transaction_new') }}" class="nav-link">
+      <img src="{{ url_for('static', filename='images/icons/expenseicon.png') }}" class="nav-icon">
+      <span>Add Expense</span>
+    </a>
+
+    <a href="{{ url_for('categories.categories') }}" class="nav-link">
+      <img src="{{ url_for('static', filename='images/icons/budgetingicon.png') }}" class="nav-icon">
+      <span>Budgeting</span>
+    </a>
+
+    <a href="{{ url_for('profile.profile') }}" class="nav-link">
+      <img src="{{ url_for('static', filename='images/icons/profileicon.png') }}" class="nav-icon">
+      <span>Profile</span>
+    </a>
+
+    <a href="{{ url_for('parent_access.parent_access') }}" class="nav-link">
+      <img src="{{ url_for('static', filename='images/icons/parentaccessicon.png') }}" class="nav-icon">
+      <span>Parent Access</span>
+    </a>
+
+    <a href="{{ url_for('faqs.faqs') }}" class="nav-link">
+      <img src="{{ url_for('static', filename='images/icons/supporticon.png') }}" class="nav-icon">
+      <span>FAQs</span>
+    </a>
+
+  {% endif %}
+
+  {% if session.get('user_role') == 'parent' %}
+    <a href="{{ url_for('parent_access.parent_access') }}" class="nav-link">
+      <img src="{{ url_for('static', filename='images/icons/parentaccessicon.png') }}" class="nav-icon">
+      <span>View Student</span>
+    </a>
+  {% endif %}
+
+  <a href="{{ url_for('auth.logout') }}" class="nav-link">
+    <img src="{{ url_for('static', filename='images/icons/logouticon.png') }}" class="nav-icon">
+    <span>Logout</span>
+  </a>
+</nav>
+
+      
     </aside>
     {% endif %}
 
@@ -53,10 +89,16 @@
         <div class="topbar-right">
           <div class="topbar-user">
             <div class="topbar-user-text">
-              <div class="topbar-user-name">Bag User</div>
-              
+              <div class="topbar-user-name">{{ nav_display_name }}</div>
             </div>
-            <div class="topbar-avatar">B</div>
+
+            {% if nav_profile_image %}
+              <div class="topbar-avatar topbar-avatar-image">
+                <img src="{{ nav_profile_image }}" alt="Profile photo">
+              </div>
+            {% else %}
+              <div class="topbar-avatar">{{ nav_avatar_letter }}</div>
+            {% endif %}
           </div>
         </div>
         {% endif %}
@@ -77,7 +119,7 @@
       </main>
 
       <footer class="footer">
-        <small>Bag capstone prototype · Flask + SQLite</small>
+        <small>Bag© 2026 Team G0</small>
       </footer>
     </div>
   </div>

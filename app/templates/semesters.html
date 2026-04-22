@@ -3,28 +3,50 @@
 <div class="card">
   <div class="row">
     <h2>Semesters</h2>
-    <a class="btn secondary" href="{{ url_for('semesters.semester_new') }}">+ New Semester</a>
+    <a class="btn secondary" href="{{ url_for('core.semester_new') }}">+ New Semester</a>
   </div>
+
+  <p class="muted">Today's date: {{ today }}</p>
 
   {% if semesters|length == 0 %}
     <p class="muted">No semesters yet. Create one to start.</p>
   {% else %}
     <table class="table">
       <thead>
-        <tr><th>Name</th><th>Dates</th><th>Weeks</th><th></th></tr>
+        <tr>
+          <th>Name</th>
+          <th>Dates</th>
+          <th>Weeks</th>
+          <th>Status</th>
+          <th>Actions</th>
+        </tr>
       </thead>
       <tbody>
-        {% for s in semesters %}
+        {% for s in semesters|sort(attribute='end_date', reverse=True)|sort(attribute='start_date', reverse=True) %}
           <tr>
-            <td>
-              {% if s.id == active_semester_id %}
-                <span class="pill green">Active</span>
-              {% endif %}
-              <strong>{{ s.name }}</strong>
-            </td>
+            <td><strong>{{ s.name }}</strong></td>
             <td>{{ s.start_date }} → {{ s.end_date }}</td>
             <td>{{ s.weeks }}</td>
-            <td><a class="link" href="{{ url_for('semesters.semester_select', semester_id=s.id) }}">Select</a></td>
+            <td>
+              {% if session.get('active_semester_id') == s.id %}
+                <span class="pill green">Selected</span>
+              {% elif s.is_active %}
+                <span class="pill">Current Dates</span>
+              {% else %}
+                <span class="muted">Not selected</span>
+              {% endif %}
+            </td>
+            <td class="table-actions">
+              {% if session.get('active_semester_id') != s.id %}
+                <a class="action-link" href="{{ url_for('core.semester_select', semester_id=s.id) }}">Select</a>
+              {% endif %}
+
+              <a class="action-link" href="{{ url_for('core.semester_edit', semester_id=s.id) }}">Edit</a>
+
+              <form method="post" action="{{ url_for('core.semester_delete', semester_id=s.id) }}" class="inline-form">
+                <button type="submit" class="action-link delete-link">Delete</button>
+              </form>
+            </td>
           </tr>
         {% endfor %}
       </tbody>
@@ -32,7 +54,7 @@
   {% endif %}
 
   {% if not profile %}
-    <p class="muted">Create a <a href="{{ url_for('profile.profile') }}">Profile</a>! </p>
+    <p class="muted">Create a <a href="{{ url_for('core.profile') }}">Profile</a>!</p>
   {% endif %}
 </div>
 {% endblock %}
