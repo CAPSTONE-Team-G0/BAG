@@ -32,7 +32,7 @@ def _goal_date_range(duration: str, semester_row=None):
     return start_date.isoformat(), end_date.isoformat()
 
 
-@bp.route("/categories", methods=["GET", "POST"])
+@bp.route("/budgeting", methods=["GET", "POST"])
 @login_required
 def categories():
     db = get_db()
