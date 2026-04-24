@@ -32,6 +32,8 @@
       <h2>Profile</h2>
 
       <div class="profile-fields">
+
+        <!-- Display Name -->
         <div class="field-block full">
           <label for="display_name">Display Name</label>
           <input
@@ -40,10 +42,10 @@
             class="profile-input"
             value="{{ profile.display_name if profile else '' }}"
             placeholder="What should we call you?"
-            readonly
           >
         </div>
 
+        <!-- State -->
         <div class="field-block">
           <label for="state">State</label>
           <select id="state" name="state" class="profile-input">
@@ -56,6 +58,7 @@
           </select>
         </div>
 
+        <!-- School -->
         <div class="field-block">
           <label for="school">School</label>
           <input
@@ -64,23 +67,20 @@
             class="profile-input"
             value="{{ profile.school if profile else '' }}"
             placeholder="Where do you go to school?"
-            readonly
           >
         </div>
 
+        <!-- Student Status -->
         <div class="field-block">
           <label for="student_status">Student Status</label>
           <select id="student_status" name="student_status" class="profile-input">
             <option value="">Select status</option>
-            <option value="Full-time" {% if profile and profile.student_status == "Full-time" %}selected{% endif %}>
-              Full-time
-            </option>
-            <option value="Part-time" {% if profile and profile.student_status == "Part-time" %}selected{% endif %}>
-              Part-time
-            </option>
+            <option value="Full-time" {% if profile and profile.student_status == "Full-time" %}selected{% endif %}>Full-time</option>
+            <option value="Part-time" {% if profile and profile.student_status == "Part-time" %}selected{% endif %}>Part-time</option>
           </select>
         </div>
 
+        <!-- Semester Weeks -->
         <div class="field-block">
           <label for="default_semester_weeks">Default Semester Weeks</label>
           <input
@@ -91,10 +91,10 @@
             min="8"
             max="26"
             value="{{ profile.default_semester_weeks if profile else 16 }}"
-            readonly
           >
         </div>
 
+        <!-- Save button -->
         <div class="full">
           <button class="btn" type="submit" id="save-profile-btn" style="display:none;">
             Save Profile
@@ -118,18 +118,14 @@
 
     <div class="photo-choice-grid">
       {% for image_name in profile_image_choices %}
-        <button
-          type="button"
-          class="photo-choice {% if profile and profile.profile_image == image_name %}selected{% endif %}"
-          data-image="{{ image_name }}"
-        >
+        <button type="button" class="photo-choice {% if profile and profile.profile_image == image_name %}selected{% endif %}" data-image="{{ image_name }}">
           <img src="{{ url_for('static', filename='images/logos/' + image_name) }}" alt="{{ image_name }}">
         </button>
       {% endfor %}
     </div>
 
     <div class="custom-upload-block">
-      <label for="custom_profile_photo" class="custom-upload-label">Or upload your own photo</label>
+      <label for="custom_profile_photo">Or upload your own photo</label>
       <input
         type="file"
         id="custom_profile_photo"
@@ -147,127 +143,101 @@
 </div>
 
 <script>
-  (function () {
-    const modal = document.getElementById("photo-modal");
-    const openBtn = document.getElementById("open-photo-modal-btn");
-    const cancelBtn = document.getElementById("cancel-photo-btn");
-    const savePhotoBtn = document.getElementById("save-photo-btn");
-    const hiddenInput = document.getElementById("profile_image");
-    const preview = document.getElementById("profile-photo-preview");
-    const choices = document.querySelectorAll(".photo-choice");
-    const uploadInput = document.getElementById("custom_profile_photo");
-    const profileForm = document.getElementById("profile-form");
+(function () {
+  const modal = document.getElementById("photo-modal");
+  const openBtn = document.getElementById("open-photo-modal-btn");
+  const cancelBtn = document.getElementById("cancel-photo-btn");
+  const savePhotoBtn = document.getElementById("save-photo-btn");
+  const hiddenInput = document.getElementById("profile_image");
+  const preview = document.getElementById("profile-photo-preview");
+  const choices = document.querySelectorAll(".photo-choice");
+  const uploadInput = document.getElementById("custom_profile_photo");
+  const profileForm = document.getElementById("profile-form");
 
-    const editBtn = document.getElementById("edit-profile-btn");
-    const saveProfileBtn = document.getElementById("save-profile-btn");
-    const inputs = document.querySelectorAll(".profile-input");
+  const editBtn = document.getElementById("edit-profile-btn");
+  const saveProfileBtn = document.getElementById("save-profile-btn");
+  const inputs = document.querySelectorAll(".profile-input");
 
-    let pendingImage = hiddenInput.value || "";
-    let isEditing = false;
+  let pendingImage = hiddenInput.value || "";
+  let isEditing = false;
 
-    function openModal() {
-      modal.classList.add("is-open");
-      modal.setAttribute("aria-hidden", "false");
-      syncSelectedState();
-    }
+  function openModal() {
+    modal.classList.add("is-open");
+    modal.setAttribute("aria-hidden", "false");
+    syncSelectedState();
+  }
 
-    function closeModal() {
-      modal.classList.remove("is-open");
-      modal.setAttribute("aria-hidden", "true");
-    }
+  function closeModal() {
+    modal.classList.remove("is-open");
+    modal.setAttribute("aria-hidden", "true");
+  }
 
-    function syncSelectedState() {
-      choices.forEach((choice) => {
-        const imageName = choice.dataset.image;
-        if (imageName === pendingImage) {
-          choice.classList.add("selected");
-        } else {
-          choice.classList.remove("selected");
-        }
-      });
-    }
-
-    function updatePreviewFromPreset(filename) {
-      preview.innerHTML = '<img src="/static/images/logos/' + filename + '" alt="Profile photo">';
-    }
-
-    function updatePreviewFromUpload(file) {
-      const reader = new FileReader();
-      reader.onload = function (e) {
-        preview.innerHTML = '<img src="' + e.target.result + '" alt="Profile photo">';
-      };
-      reader.readAsDataURL(file);
-    }
-
-    function setEditMode(enabled) {
-      isEditing = enabled;
-
-      inputs.forEach((input) => {
-        input.disabled = !enabled;
-      });
-
-      if (enabled) {
-        saveProfileBtn.style.display = "inline-flex";
-        editBtn.textContent = "Cancel Editing";
-      } else {
-        saveProfileBtn.style.display = "none";
-        editBtn.textContent = "Edit Profile";
-      }
-    }
-
-    function enableInputsBeforeSubmit() {
-      document.querySelectorAll(".profile-input").forEach(input => {
-        input.disabled = false;
-      });
-    }
-
-    openBtn.addEventListener("click", openModal);
-    cancelBtn.addEventListener("click", closeModal);
-
-    modal.addEventListener("click", function (event) {
-      if (event.target === modal) {
-        closeModal();
-      }
-    });
-
+  function syncSelectedState() {
     choices.forEach((choice) => {
-      choice.addEventListener("click", function () {
-        pendingImage = choice.dataset.image;
-        uploadInput.value = "";
-        syncSelectedState();
-      });
+      const imageName = choice.dataset.image;
+      choice.classList.toggle("selected", imageName === pendingImage);
     });
+  }
 
-    savePhotoBtn.addEventListener("click", function () {
-      if (pendingImage && !(uploadInput.files && uploadInput.files[0])) {
-        hiddenInput.value = pendingImage;
-        updatePreviewFromPreset(pendingImage);
-      }
+  function updatePreviewFromPreset(filename) {
+    preview.innerHTML = '<img src="/static/images/logos/' + filename + '">';
+  }
 
-      if (uploadInput.files && uploadInput.files[0]) {
-        hiddenInput.value = "";
-        updatePreviewFromUpload(uploadInput.files[0]);
-      }
+  function updatePreviewFromUpload(file) {
+    const reader = new FileReader();
+    reader.onload = e => {
+      preview.innerHTML = '<img src="' + e.target.result + '">';
+    };
+    reader.readAsDataURL(file);
+  }
 
-      closeModal();
+  function setEditMode(enabled) {
+    isEditing = enabled;
+    inputs.forEach(input => input.disabled = !enabled);
+    saveProfileBtn.style.display = enabled ? "inline-flex" : "none";
+    editBtn.textContent = enabled ? "Cancel Editing" : "Edit Profile";
+  }
 
-      enableInputsBeforeSubmit();
-      profileForm.requestSubmit();
-    });
+  function enableInputsBeforeSubmit() {
+    inputs.forEach(input => input.disabled = false);
+  }
 
-    editBtn.addEventListener("click", function () {
-      if (isEditing) {
-        window.location.reload();
-      } else {
-        setEditMode(true);
-      }
-    });
+  openBtn.onclick = openModal;
+  cancelBtn.onclick = closeModal;
 
-    profileForm.addEventListener("submit", function () {
-      enableInputsBeforeSubmit();
-    });
+  choices.forEach(choice => {
+    choice.onclick = () => {
+      pendingImage = choice.dataset.image;
+      uploadInput.value = "";
+      syncSelectedState();
+    };
+  });
 
-    setEditMode(false);
-  })();
+  savePhotoBtn.onclick = () => {
+    if (uploadInput.files && uploadInput.files[0]) {
+      hiddenInput.value = "";
+      updatePreviewFromUpload(uploadInput.files[0]);
+    } else if (pendingImage) {
+      hiddenInput.value = pendingImage;
+      updatePreviewFromPreset(pendingImage);
+    }
+
+    closeModal();
+    enableInputsBeforeSubmit();
+    profileForm.requestSubmit();
+  };
+
+  editBtn.onclick = () => {
+    if (isEditing) {
+      window.location.reload();
+    } else {
+      setEditMode(true);
+    }
+  };
+
+  profileForm.addEventListener("submit", enableInputsBeforeSubmit);
+
+  setEditMode(false);
+})();
 </script>
 {% endblock %}
