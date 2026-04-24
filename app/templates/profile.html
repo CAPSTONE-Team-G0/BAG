@@ -6,15 +6,9 @@
       <div class="profile-photo-circle" id="profile-photo-preview">
         {% if profile and profile.profile_image %}
           {% if profile.profile_image.startswith('uploads/') %}
-            <img
-              src="{{ url_for('static', filename=profile.profile_image) }}"
-              alt="Profile photo"
-            >
+            <img src="{{ url_for('static', filename=profile.profile_image) }}" alt="Profile photo">
           {% else %}
-            <img
-              src="{{ url_for('static', filename='images/logos/' + profile.profile_image) }}"
-              alt="Profile photo"
-            >
+            <img src="{{ url_for('static', filename='images/logos/' + profile.profile_image) }}" alt="Profile photo">
           {% endif %}
         {% else %}
           <span>PFP</span>
@@ -24,19 +18,11 @@
       <div class="profile-settings-panel">
         <h3>Profile Settings</h3>
 
-        <button
-          type="button"
-          class="btn secondary profile-side-btn"
-          id="open-photo-modal-btn"
-        >
+        <button type="button" class="btn secondary profile-side-btn" id="open-photo-modal-btn">
           Change Photo
         </button>
 
-        <button
-          type="button"
-          class="btn secondary profile-side-btn"
-          id="edit-profile-btn"
-        >
+        <button type="button" class="btn secondary profile-side-btn" id="edit-profile-btn">
           Edit Profile
         </button>
       </div>
@@ -46,8 +32,6 @@
       <h2>Profile</h2>
 
       <div class="profile-fields">
-
-        <!-- Display Name (full width) -->
         <div class="field-block full">
           <label for="display_name">Display Name</label>
           <input
@@ -60,15 +44,9 @@
           >
         </div>
 
-        <!-- State -->
         <div class="field-block">
           <label for="state">State</label>
-          <select
-            id="state"
-            name="state"
-            class="profile-input"
-            
-          >
+          <select id="state" name="state" class="profile-input">
             <option value="">Select state</option>
             {% for s in states %}
               <option value="{{ s }}" {% if profile and profile.state == s %}selected{% endif %}>
@@ -78,7 +56,6 @@
           </select>
         </div>
 
-        <!-- School -->
         <div class="field-block">
           <label for="school">School</label>
           <input
@@ -91,15 +68,9 @@
           >
         </div>
 
-        <!-- Student Status -->
         <div class="field-block">
           <label for="student_status">Student Status</label>
-          <select
-            id="student_status"
-            name="student_status"
-            class="profile-input"
-            
-          >
+          <select id="student_status" name="student_status" class="profile-input">
             <option value="">Select status</option>
             <option value="Full-time" {% if profile and profile.student_status == "Full-time" %}selected{% endif %}>
               Full-time
@@ -110,7 +81,6 @@
           </select>
         </div>
 
-        <!-- Semester Weeks -->
         <div class="field-block">
           <label for="default_semester_weeks">Default Semester Weeks</label>
           <input
@@ -125,26 +95,20 @@
           >
         </div>
 
-  <!-- Save button -->
-  <div class="full">
-    <button
-      class="btn"
-      type="submit"
-      id="save-profile-btn"
-      style="display:none;"
-    >
-      Save Profile
-    </button>
-  </div>
+        <div class="full">
+          <button class="btn" type="submit" id="save-profile-btn" style="display:none;">
+            Save Profile
+          </button>
+        </div>
+      </div>
 
-</div>
-
-    <input
-      type="hidden"
-      name="profile_image"
-      id="profile_image"
-      value="{{ profile.profile_image if profile and profile.profile_image else '' }}"
-    >
+      <input
+        type="hidden"
+        name="profile_image"
+        id="profile_image"
+        value="{{ profile.profile_image if profile and profile.profile_image else '' }}"
+      >
+    </div>
   </form>
 </div>
 
@@ -159,10 +123,7 @@
           class="photo-choice {% if profile and profile.profile_image == image_name %}selected{% endif %}"
           data-image="{{ image_name }}"
         >
-          <img
-            src="{{ url_for('static', filename='images/logos/' + image_name) }}"
-            alt="{{ image_name }}"
-          >
+          <img src="{{ url_for('static', filename='images/logos/' + image_name) }}" alt="{{ image_name }}">
         </button>
       {% endfor %}
     </div>
@@ -173,6 +134,7 @@
         type="file"
         id="custom_profile_photo"
         name="custom_profile_photo"
+        form="profile-form"
         accept=".png,.jpg,.jpeg,.gif,.webp"
       >
     </div>
@@ -277,13 +239,11 @@
     });
 
     savePhotoBtn.addEventListener("click", function () {
-      // preset selected
       if (pendingImage && !(uploadInput.files && uploadInput.files[0])) {
         hiddenInput.value = pendingImage;
         updatePreviewFromPreset(pendingImage);
       }
 
-      // uploaded file selected
       if (uploadInput.files && uploadInput.files[0]) {
         hiddenInput.value = "";
         updatePreviewFromUpload(uploadInput.files[0]);
@@ -291,11 +251,8 @@
 
       closeModal();
 
-      
-
-      // ✅ NOW submit safely
       enableInputsBeforeSubmit();
-      profileForm.submit();
+      profileForm.requestSubmit();
     });
 
     editBtn.addEventListener("click", function () {
@@ -306,7 +263,6 @@
       }
     });
 
-    // enable disabled fields before submit
     profileForm.addEventListener("submit", function () {
       enableInputsBeforeSubmit();
     });
