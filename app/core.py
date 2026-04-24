@@ -21,9 +21,10 @@ US_STATES = [
 ]
 
 PROFILE_IMAGE_CHOICES = [
-    "profile1.png",
-    "profile2.png",
-    "profile3.png",
+    "baglogo.png",
+    "baglogogreen.png",
+    "baglogored.png",
+    "baglogopurple.png",
 ]
 
 

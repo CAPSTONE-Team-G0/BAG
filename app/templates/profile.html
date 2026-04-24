@@ -46,7 +46,9 @@
       <h2>Profile</h2>
 
       <div class="profile-fields">
-        <div class="field-block">
+
+        <!-- Display Name (full width) -->
+        <div class="field-block full">
           <label for="display_name">Display Name</label>
           <input
             id="display_name"
@@ -54,17 +56,18 @@
             class="profile-input"
             value="{{ profile.display_name if profile else '' }}"
             placeholder="What should we call you?"
-            disabled
+            readonly
           >
         </div>
 
+        <!-- State -->
         <div class="field-block">
           <label for="state">State</label>
           <select
             id="state"
             name="state"
             class="profile-input"
-            disabled
+            
           >
             <option value="">Select state</option>
             {% for s in states %}
@@ -75,6 +78,7 @@
           </select>
         </div>
 
+        <!-- School -->
         <div class="field-block">
           <label for="school">School</label>
           <input
@@ -83,17 +87,18 @@
             class="profile-input"
             value="{{ profile.school if profile else '' }}"
             placeholder="Where do you go to school?"
-            disabled
+            readonly
           >
         </div>
 
+        <!-- Student Status -->
         <div class="field-block">
           <label for="student_status">Student Status</label>
           <select
             id="student_status"
             name="student_status"
             class="profile-input"
-            disabled
+            
           >
             <option value="">Select status</option>
             <option value="Full-time" {% if profile and profile.student_status == "Full-time" %}selected{% endif %}>
@@ -105,7 +110,8 @@
           </select>
         </div>
 
-        <div class="field-block full">
+        <!-- Semester Weeks -->
+        <div class="field-block">
           <label for="default_semester_weeks">Default Semester Weeks</label>
           <input
             type="number"
@@ -115,22 +121,23 @@
             min="8"
             max="26"
             value="{{ profile.default_semester_weeks if profile else 16 }}"
-            disabled
+            readonly
           >
         </div>
 
-        <div class="full">
-          <button
-            class="btn"
-            type="submit"
-            id="save-profile-btn"
-            style="display:none;"
-          >
-            Save Profile
-          </button>
-        </div>
-      </div>
-    </div>
+  <!-- Save button -->
+  <div class="full">
+    <button
+      class="btn"
+      type="submit"
+      id="save-profile-btn"
+      style="display:none;"
+    >
+      Save Profile
+    </button>
+  </div>
+
+</div>
 
     <input
       type="hidden"
@@ -246,6 +253,12 @@
       }
     }
 
+    function enableInputsBeforeSubmit() {
+      document.querySelectorAll(".profile-input").forEach(input => {
+        input.disabled = false;
+      });
+    }
+
     openBtn.addEventListener("click", openModal);
     cancelBtn.addEventListener("click", closeModal);
 
@@ -278,7 +291,10 @@
 
       closeModal();
 
-      // submit form immediately so photo is actually saved to DB
+      
+
+      // ✅ NOW submit safely
+      enableInputsBeforeSubmit();
       profileForm.submit();
     });
 
@@ -292,9 +308,7 @@
 
     // enable disabled fields before submit
     profileForm.addEventListener("submit", function () {
-      document.querySelectorAll(".profile-input").forEach(input => {
-        input.disabled = false;
-      });
+      enableInputsBeforeSubmit();
     });
 
     setEditMode(false);

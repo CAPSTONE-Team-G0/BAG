@@ -520,43 +520,45 @@ input::placeholder, textarea::placeholder{
    Profile page
 ========================= */
 
-.profile-card,
-.profile-card * {
-  color: var(--text);
-}
-
 .profile-card {
-  background: var(--surface);
-  border: none;
-  box-shadow: var(--shadow-soft);
+  max-width: 1000px;
+  margin: 0 auto 24px;
+  padding: 34px;
+  border-radius: 34px;
+  background: transparent;
+  box-shadow: none;
 }
 
 .profile-layout {
   display: grid;
-  grid-template-columns: 260px 1fr;
-  gap: 24px;
+  grid-template-columns: 250px 1fr;
+  gap: 38px;
   align-items: start;
 }
 
 .profile-left {
   display: flex;
   flex-direction: column;
-  gap: 16px;
+  align-items: center;
+  gap: 18px;
 }
 
 .profile-photo-circle {
-  width: 180px;
-  height: 180px;
+  width: 190px;
+  height: 190px;
   border-radius: 50%;
-  margin: 0 auto;
-  background: linear-gradient(135deg, #e8ecf7, #d8def0);
+  background: linear-gradient(135deg, #e9eefb, #d8def0);
   display: flex;
   align-items: center;
   justify-content: center;
+  font-family: "Plus Jakarta Sans", system-ui, sans-serif;
   font-weight: 800;
-  font-size: 20px;
+  font-size: 22px;
   color: var(--primary);
   overflow: hidden;
+  box-shadow:
+    0 0 0 8px #ffffff,
+    0 18px 38px rgba(33, 36, 85, .14);
 }
 
 .profile-photo-circle img {
@@ -566,35 +568,56 @@ input::placeholder, textarea::placeholder{
 }
 
 .profile-settings-panel {
-  background: #fff;
-  border: none;
-  border-radius: 18px;
-  padding: 16px;
+  width: 100%;
+  background: transparent;
+  border-radius: 24px;
+  padding: 10px 4px 0;
+  box-shadow: none;
+  text-align: center;
 }
 
 .profile-settings-panel h3 {
-  margin: 0 0 12px 0;
+  margin: 0 0 14px;
+  font-size: 18px;
+  color: var(--primary);
 }
 
 .profile-side-btn {
   width: 100%;
   margin-bottom: 10px;
+  padding: 13px 16px;
 }
 
-.profile-side-btn:last-child {
-  margin-bottom: 0;
+.profile-right {
+  position: relative;
+  padding: 38px 40px;
+  border-radius: 34px;
+  background: rgba(248, 242, 249, .92);
+  box-shadow:
+    inset 0 0 0 1px rgba(255,255,255,.45),
+    0 18px 42px rgba(33, 36, 85, .06);
+  overflow: hidden;
+}
+
+
+
+.profile-right h2,
+.profile-fields {
+  position: relative;
+  z-index: 1;
 }
 
 .profile-right h2 {
-  margin-top: 0;
-  margin-bottom: 16px;
+  margin: 0 0 24px;
+  font-size: 34px;
+  line-height: 1;
   color: var(--primary);
 }
 
 .profile-fields {
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: 14px;
+  gap: 24px 30px;
 }
 
 .field-block {
@@ -602,31 +625,140 @@ input::placeholder, textarea::placeholder{
   flex-direction: column;
 }
 
-.field-block.full,
-.profile-fields .full {
+.field-block.full {
   grid-column: 1 / -1;
 }
 
 .profile-card label {
-  color: var(--muted);
+  margin-bottom: 10px;
+  color: #54505d;
+  font-size: 12px;
+  font-weight: 800;
+  letter-spacing: .14em;
+  text-transform: uppercase;
 }
 
 .profile-card input,
 .profile-card select {
-  background: #fff;
+  min-height: 58px;
+  border-radius: 14px;
+  background: #ffffff;
   color: var(--text);
   border: none;
-  box-shadow: inset 0 0 0 1px rgba(33,36,85,.08);
+  padding: 16px 22px;
+  font-size: 16px;
+  box-shadow: none;
 }
 
-.profile-card .btn {
-  color: #fff;
+.profile-card input:focus,
+.profile-card select:focus {
+  box-shadow: inset 0 0 0 2px rgba(86, 99, 173, .35);
 }
 
-.profile-card .btn.secondary {
-  background: #ece7ee;
-  color: var(--primary);
+/* ===== READ-ONLY (NOT EDITING) ===== */
+
+.profile-input:disabled {
+  background: transparent;
+  border: none;
+  box-shadow: none;
+  padding: 0;
+  font-size: 16px;
+  color: var(--text);
+  cursor: default;
 }
+
+/* remove ALL interaction feel */
+.profile-input:disabled:hover,
+.profile-input:disabled:focus {
+  outline: none;
+  box-shadow: none;
+}
+
+/* dropdown arrow disappears when not editing */
+.profile-input:disabled {
+  appearance: none;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+}
+
+/* optional subtle divider like clean UI */
+.field-block {
+  padding-bottom: 10px;
+  border-bottom: 1px solid rgba(33,36,85,.06);
+}
+
+#save-profile-btn {
+  min-width: 200px;
+  min-height: 54px;
+  margin-top: 24px;
+  float: right;
+  box-shadow: 0 16px 28px rgba(33, 36, 85, .18);
+}
+
+@media (max-width: 900px) {
+  .profile-card {
+    padding: 22px;
+  }
+
+  .profile-layout {
+    grid-template-columns: 1fr;
+  }
+
+  .profile-fields {
+    grid-template-columns: 1fr;
+  }
+
+  .profile-right {
+    padding: 28px 24px;
+  }
+
+  .profile-photo-circle {
+    width: 160px;
+    height: 160px;
+  }
+
+  #save-profile-btn {
+    float: none;
+    width: 100%;
+  }
+}
+
+/* =========================
+   Profile typography upgrade
+========================= */
+
+/* FIELD LABELS (titles like STATE, SCHOOL, etc.) */
+.profile-card label {
+  font-family: "Plus Jakarta Sans", system-ui, sans-serif;
+  font-size: 14px;          /* bigger */
+  font-weight: 800;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: #4b4654;
+}
+
+/* INPUT TEXT (what user sees/enters) */
+.profile-card input,
+.profile-card select {
+  font-family: "Plus Jakarta Sans", system-ui, sans-serif;
+  font-size: 18px;          /* bigger + more readable */
+  font-weight: 600;
+}
+
+/* DISPLAY (when disabled / not editing) */
+.profile-input:disabled {
+  font-size: 18px;
+  font-weight: 600;
+}
+
+/* PROFILE HEADER (Profile title) */
+.profile-right h2 {
+  font-family: "Plus Jakarta Sans", system-ui, sans-serif;
+  font-size: 36px;          /* slightly bigger */
+  font-weight: 800;
+}
+
+
 
 /* =========================
    Photo modal
@@ -977,9 +1109,20 @@ input::placeholder, textarea::placeholder{
   padding: 8px;
 }
 
+.budget-goal-icon {
+  width: 44px;
+  height: 44px;
+  border-radius: 14px;
+  background: #ffffff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+}
+
 .budget-goal-icon img {
-  width: 24px;
-  height: 24px;
+  width: 100%;
+  height: 100%;
   object-fit: contain;
   display: block;
 }

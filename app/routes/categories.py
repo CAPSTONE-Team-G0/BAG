@@ -232,16 +232,20 @@ def categories():
             status = "ACTIVE"
             status_class = "green"
 
+        
+
+        category_name = (g["category_name"] or "").strip().lower()
+
         icon_file = {
-            "Food": "foodicon.png",
-            "Health": "healthicon.png",
-            "Housing": "housingicon.png",
-            "Other": "othericon.png",
-            "Personal": "personalicon.png",
-            "School Supplies": "suppliesicon.png",
-            "Textbooks": "booksicon.png",
-            "Transportation": "transportationicon.png",
-        }.get((g["category_name"] or "").strip(), "othericon.png")
+            "food": "foodicon.png",
+            "health": "healthicon.png",
+            "housing": "housingicon.png",
+            "other": "othericon.png",
+            "personal": "personalicon.png",
+            "school supplies": "suppliesicon.png",
+            "textbooks": "booksicon.png",
+            "transportation": "transportationicon.png",
+        }.get(category_name, "othericon.png")
 
         subtitle_map = {
             "weekly": "Weekly spending goal",
