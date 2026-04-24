@@ -26,13 +26,13 @@ Merged Mattea branch to main
 
 
 
-* Remove "fiscal sanctuary" DONE -M
-* Remove "student plan" label in bottom left DONE -M
-* Profile photo only has pictures of money bags, maybe add option to upload photos from computer (NOT URGENT) -INPROGRESS -M
+* DONE -M Remove "fiscal sanctuary" 
+* DONE -M Remove "student plan" label in bottom left 
+* -INPROGRESS -M Profile photo only has pictures of money bags, maybe add option to upload photos from computer (NOT URGENT) 
 * DONE Change "add transaction" tab to be the source of all DEDUCTIONS, and "add aid" to be source of all INCOMING money. 
 * DONE Change tab name "add transaction" to (Expenses, etc) 
 * DONE Change tab name "add aid" to (Funds, etc)
-* Add small logos to tabs for better clarity on what they do, shopping cart/bag for expenses, dollar or money sign for funds DONE -M
+* DONE -M Add small logos to tabs for better clarity on what they do, shopping cart/bag for expenses, dollar or money sign for funds 
 * DONE Change categories tab to Budgeting, should allow budgeted categories for each category
 * DONE Move current "categories" tab feature, which allows you to create custom categories, to the add transaction feature as opposed to having its own tab
 * Clearer organization for money spent/money earned on dashboard. Original stitch layout should be 
