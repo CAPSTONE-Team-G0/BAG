@@ -7,7 +7,8 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Work+Sans:wght@400;500;600&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+  {% block extra_css %}{% endblock %}
 </head>
 <body>
   <div class="app-shell">
@@ -15,7 +16,9 @@
     {% if session.get('user_id') %}
     <aside class="sidebar">
       <div class="sidebar-brand">
-        <div class="logo">BAG</div>
+        <a href="{{ url_for('home.welcome') }}" class="logo">
+          <img src="{{ url_for('static', filename='images/logos/baglogomain2.png') }}" alt="BAG Logo" class="sidebar-logo">
+        </a>
         <div class="sidebar-tagline">SECURE YOUR BAG.</div>
       </div>
 

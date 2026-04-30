@@ -1,8 +1,13 @@
 {% extends "base.html" %}
+{% block extra_css %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/faqsstyle.css') }}">
+{% endblock %}
 
-{% block title %}FAQs | BAG{% endblock %}
+{% block title %}FAQs | BAG {% endblock %}
+
 
 {% block content %}
+
 <div class="faq-page">
   <div class="faq-hero card">
     <p class="faq-eyebrow">Support</p>

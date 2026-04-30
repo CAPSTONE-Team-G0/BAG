@@ -1,5 +1,10 @@
 {% extends "base.html" %}
+{% block extra_css %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/profilestyle.css') }}">
+{% endblock %}
+
 {% block content %}
+
 <div class="card profile-card">
   <form method="post" class="profile-layout" enctype="multipart/form-data" id="profile-form">
     <div class="profile-left">

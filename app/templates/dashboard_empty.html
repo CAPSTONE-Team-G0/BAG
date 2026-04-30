@@ -1,5 +1,10 @@
 {% extends "base.html" %}
+{% block extra_css %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/dashboardstyle.css') }}">
+{% endblock %}
+
 {% block content %}
+
 <div class="card">
   <h2>Dashboard</h2>
   <p class="muted">You’re logged in, but you haven’t selected a semester yet.</p>

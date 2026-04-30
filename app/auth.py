@@ -99,7 +99,7 @@ def login():
         if user["role"] == "parent":
             return redirect(url_for("parent_access.parent_access"))
 
-        return redirect(url_for("dashboard.dashboard"))
+        return redirect(url_for("home.welcome"))
 
     return render_template("login.html")
 

@@ -60,11 +60,7 @@ def _cents_to_money(cents: int) -> float:
     return (cents or 0) / 100.0
 
 
-@bp.route("/")
-def home():
-    if session.get("user_id") is None:
-        return redirect(url_for("auth.login"))
-    return redirect(url_for("core.dashboard"))
+
 
 
 

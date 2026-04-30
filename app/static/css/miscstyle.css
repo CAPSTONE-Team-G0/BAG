@@ -1,0 +1,101 @@
+/* =========================
+   Misc auth pages: login, register, forgot/reset password
+   Add page-specific styles here.
+========================= */
+.login-split-page{
+  min-height:calc(100vh - 160px);
+  display:grid;
+  grid-template-columns:1.1fr .9fr;
+  gap:32px;
+  align-items:stretch;
+}
+
+.login-welcome-panel{
+  min-height:640px;
+  border-radius:32px;
+  background:
+    radial-gradient(circle at 20% 15%, rgba(176,211,101,.28), transparent 32%),
+    linear-gradient(135deg, #f8f2f9, #e6e1e8);
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  padding:70px 40px 50px;
+  box-shadow:var(--shadow-soft);
+}
+
+.login-main-logo{
+  width:min(520px, 88%);
+  height:auto;
+  object-fit:contain;
+  margin-top:10px;
+}
+
+.login-welcome-text{
+  margin-top:44px;
+  text-align:center;
+}
+
+.login-welcome-text h1{
+  margin:0 0 12px;
+  font-size:48px;
+  line-height:1;
+  color:var(--primary);
+}
+
+.login-welcome-text p{
+  margin:0 auto;
+  max-width:420px;
+  color:var(--muted);
+  font-size:17px;
+  line-height:1.6;
+}
+
+.login-form-panel{
+  display:flex;
+  align-items:center;
+  justify-content:center;
+}
+
+.login-card{
+  width:100%;
+  max-width:460px;
+  margin:0;
+}
+
+.login-card h2{
+  color:var(--primary);
+  font-size:32px;
+  margin-top:0;
+}
+
+@media (max-width: 950px){
+  .login-split-page{
+    grid-template-columns:1fr;
+  }
+
+  .login-welcome-panel{
+    min-height:auto;
+    padding:42px 24px;
+  }
+
+  .login-main-logo{
+    width:min(360px, 90%);
+  }
+
+  .login-welcome-text h1{
+    font-size:38px;
+  }
+}
+
+.form-group{
+  margin-bottom:14px;
+}
+
+.form-group label{
+  display:block;
+  margin-bottom:6px;
+}
+
+.auth-card form .btn{
+  margin-top:4px;
+}

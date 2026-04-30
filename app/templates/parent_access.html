@@ -1,5 +1,10 @@
 {% extends "base.html" %}
+{% block extra_css %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/parentstyle.css') }}">
+{% endblock %}
+
 {% block content %}
+
 
 <div class="card">
   {% if session.get('user_role') == 'student' %}

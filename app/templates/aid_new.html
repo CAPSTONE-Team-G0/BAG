@@ -1,5 +1,10 @@
 {% extends "base.html" %}
+{% block extra_css %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/fundsstyle.css') }}">
+{% endblock %}
+
 {% block content %}
+
 <div class="card">
   <h2>Add Funds </h2>
   <form method="post" class="form grid">
@@ -24,7 +29,7 @@
       <input type="number" step="0.01" min="0.01" name="amount" required>
     </div>
     <div>
-      <label>Disbursement date</label>
+      <label>Date</label>
       <input type="date" name="disbursement_date" required>
     </div>
     <div class="full">

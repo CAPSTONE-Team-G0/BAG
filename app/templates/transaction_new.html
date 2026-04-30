@@ -1,5 +1,10 @@
 {% extends "base.html" %}
+{% block extra_css %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/expensestyle.css') }}">
+{% endblock %}
+
 {% block content %}
+
 <div class="card">
   <h2>Add Expense</h2>
   <form method="post" class="form grid">
@@ -18,14 +23,14 @@
       <input type="number" step="0.01" min="0.01" name="amount" required>
     </div>
     <div class="full">
-      <label>Category (for expenses)</label>
+      <label>Category</label>
       <select name="category_id">
         <option value="">(none)</option>
         {% for c in categories %}
           <option value="{{ c.id }}">{{ c.name }}</option>
         {% endfor %}
       </select>
-      <div class="hint">Income can leave category blank.</div>
+      
     </div>
     <div class="full">
   <label>Add New Category (optional)</label>
