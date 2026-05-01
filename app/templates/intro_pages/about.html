@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>About the Team | BAG</title>
+  <link rel="stylesheet" href="static/css/introstyle.css">
+</head>
+<body>
+  <header class="site-header">
+    <nav class="navbar">
+      <a class="brand" href="{{ url_for('home.home') }}">
+        <span class="brand-badge">
+          <img src="{{ url_for('static', filename='images/logos/baglogo.png') }}" alt="BAG Logo">
+        </span>
+        <span>BAG Semester Budgeting</span>
+      </a>
+      <div class="nav-links">
+        <a class="active" href="{{ url_for('home.home') }}">Home</a>
+        <a href="{{ url_for('home.about') }}">About the team</a>
+        <a href="{{ url_for('auth.login') }}" class="button get-started">
+          Login
+        </a>
+        <a href="{{ url_for('auth.register') }}" class="button register">
+          Register
+        </a>
+        
+      </div>
+    </nav>
+  </header>
+
+  <main>
+    <section class="page-hero">
+      <h1>About the Team</h1>
+      <p>
+        We’re a small team of IT students who came together with a graphic design student to build BAG for our capstone project.
+        Three team members focused on programming, one focused on database work, and one helped shape the visual identity and branding.
+        We’re all graduating soon, but we hope to keep improving BAG beyond this project.
+      </p>
+    </section>
+
+    <!-- Top = 4 cards  -->
+    <section class="team-grid">
+      <article class="person-card">
+
+        <img src="static/images/team/joey.png" alt="Joey" class="card-photo">
+
+        <h3>Joey Ackerman-Lowery</h3>
+        <small>Programming Student</small>
+        
+        <p>
+          Joey is a Computer Programming student at Fayetteville Technical Community College and has already earned an associate degree in Cybersecurity.
+          She will graduate in May with additional associate degrees in Computer Programming and Cloud Management.
+          Her skills include Java, Python, database management, and application development.
+        </p>
+        <p>
+          For BAG, Joey developed the initial version of the financial tracking application, providing the foundation for the team’s work.
+          She focused on enhancing the Dashboard, Semesters, Transactions, and Funding sections by implementing edit and delete functionality
+          and improving how data is organized and displayed.
+        </p>
+
+        <p>
+          Joey's strengths include problem-solving, attention to detail, and ensuring smooth integration between front-end design and back-end functionality.
+        </p>
+
+        <a href="https://github.com/ackermaj5301" class="button secondary">Joey's Github</a>
+
+      </article>
+
+      <article class="person-card">
+
+        <img src="static/images/team/mattea.png" alt="Mattea" class="card-photo">
+
+        <h3>Mattea Isley</h3>
+        <small>Programming Student</small>
+        
+        <p>
+          Mattea is an Information Technology student at Fayetteville Technical Community College, originally from California, with a strong background in software 
+          development and systems. She is completing degrees in Computer Programming and Development, and Cloud Management, with skills in Python, Java, C++, HTML, 
+          Linux, cloud technologies, and networking.
+
+          For BAG, Mattea played a key role in developing and refining the profile and budgeting pages. She also created the app’s intro screens, 
+          helping shape the user’s first experience. Beyond development, she organized and built the team’s GitHub Pages website, 
+          ensuring the project was clearly presented and well-structured.
+
+          After transitioning to remote early in the process, she remained highly adaptable and collaborative. She continued to contribute 
+          consistently from a distance and is especially grateful for the support and teamwork of her peers throughout the project.
+
+        </p>
+      
+        <a href="https://github.com/isleym9447" class="button secondary">Mattea's Github</a>
+
+      </article>
+
+       <article class="person-card">
+
+        <img src="images/team/Paul.png" alt="Paul" class="card-photo">
+
+        <h3>Paul Gayle</h3>
+        <small>Programming Student</small>
+        
+        <p>ADD IN BLURB</p>
+
+        <a href="https://github.com/PaulGayle" class="button secondary">Paul's Github</a>
+        
+      </article>
+
+      <article class="person-card">
+
+        <img src="static/images/team/LoffertHeadshotBAG.jpg" alt="Loffert" class="card-photo">
+
+        <h3>Lydia Loffert</h3>
+        <small>Database Student</small>
+        
+        <p>
+          Loffert is a Database Management student at Fayetteville Technical Community College studying database programming and design. 
+          She has skills in SQL, Python, C++, and HTML, with a strong focus in SQL. For BAG, Loffert contributed to the front-end design, 
+          debugging, and oversight with the database structure. She oversaw the coordination between remote and physical members and helped 
+          steer the team with Agile best practices. She demonstrated strong communication skills, ability to troubleshoot and flexibility
+          with the time-crunch. 
+        </p>
+
+        <a href="https://github.com/Lloffert" class="button secondary">Loffert's Github</a>
+        
+      </article>
+    </section>
+
+    <!-- Our Goal under -->
+    <section class="center-section">
+      <article class="person-card highlight goal-card">
+        <h3>Our Goal</h3>
+        
+        <a href="https://github.com/CAPSTONE-Team-G0" class="button secondary">Team G0's Github</a>
+        <p>
+          BAG was created to help students better understand, manage, and stretch their financial aid through the semester
+          with a cleaner and more supportive experience.
+        </p>
+        
+      </article>
+    </section>
+
+    <!-- Team Member 5 centered -->
+    <section class="center-section">
+      <article class="person-card member-five-card">
+        <h3>Eva Davies</h3>
+        <small>Graphic Design Student</small>
+        <p>
+          Created the visual direction for BAG, including branding, presentation, and the polished look of the project.
+        </p>
+      </article>
+    </section>
+  </main>
+
+  <footer class="footer">
+  
+  </footer>
+</body>
+</html>

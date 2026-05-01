@@ -1,0 +1,52 @@
+{% extends "base.html" %}
+{% block extra_css %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/semestersstyle.css') }}">
+{% endblock %}
+
+{% block content %}
+
+<div class="card">
+  <h2>New Semester</h2>
+  <form method="post" class="form grid">
+    <div class="full">
+      <label>Semester name</label>
+      <div class="form grid">
+        <div>
+          <label>Term</label>
+          <select name="term" required>
+            <option value="" disabled selected>Select term</option>
+            <option value="Spring">Spring</option>
+            <option value="Summer">Summer</option>
+            <option value="Fall">Fall</option>
+          </select>
+        </div>
+
+        <div>
+          <label>Year</label>
+          <select name="year" required>
+            <option value="" disabled selected>Select year</option>
+            <option value="2025">2025</option>
+            <option value="2026">2026</option>
+            <option value="2027">2027</option>
+            <option value="2028">2028</option>
+            <option value="2029">2029</option>
+            <option value="2030">2030</option>
+          </select>
+        </div>
+      </div>
+    </div>
+    <div>
+      <label>Start date</label>
+      <input type="date" name="start_date" required>
+    </div>
+    <div>
+      <label>End date</label>
+      <input type="date" name="end_date" required>
+    </div>
+    
+    <div class="full">
+      <button class="btn" type="submit">Create Semester</button>
+    </div>
+  </form>
+</div>
+{% endblock %}

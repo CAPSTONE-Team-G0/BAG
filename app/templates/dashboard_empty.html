@@ -1,0 +1,22 @@
+{% extends "base.html" %}
+{% block extra_css %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/dashboardstyle.css') }}">
+{% endblock %}
+
+{% block content %}
+
+<div class="card">
+  <h2>Dashboard</h2>
+  <p class="muted">You do not have any semesters yet. Create a semester to start tracking your funds and expenses.</p>
+
+  <div class="row">
+    <a class="btn" href="{{ url_for('semesters.semester_new') }}">Create a Semester</a>
+  </div>
+
+  {% if not profile %}
+    <hr class="sep">
+    <p class="muted">Create a <a href="{{ url_for('profile.profile') }}">Profile</a>!</p>
+  {% endif %}
+</div>
+
+{% endblock %}

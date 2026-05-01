@@ -1,0 +1,70 @@
+{% extends "base.html" %}
+{% block extra_css %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/miscstyle.css') }}">
+{% endblock %}
+
+{% block content %}
+
+<div class="login-split-page">
+  <section class="login-welcome-panel">
+    <img
+      src="{{ url_for('static', filename='images/logos/baglogomain.png') }}"
+      alt="BAG Semester Budgeting Logo"
+      class="login-main-logo"
+    >
+
+    <div class="login-welcome-text">
+      <h1>Welcome</h1>
+      <p>Create your account and start planning your semester with BAG.</p>
+    </div>
+  </section>
+
+  <section class="login-form-panel">
+    <div class="card auth-card login-card">
+      <h2>Create Account</h2>
+      <p class="muted">Register as a student or a parent/guardian.</p>
+
+      <form method="post">
+        <div class="form-group">
+          <label for="email">Email</label>
+          <input
+            type="email"
+            id="email"
+            name="email"
+            required
+            placeholder="Enter your email"
+          >
+        </div>
+
+        <div class="form-group">
+          <label for="password">Password</label>
+          <input
+            type="password"
+            id="password"
+            name="password"
+            required
+            minlength="6"
+            placeholder="Enter a password"
+          >
+        </div>
+
+        <div class="form-group">
+          <label for="role">Register as</label>
+          <select id="role" name="role" required>
+            <option value="student">Student</option>
+            <option value="parent">Parent / Guardian</option>
+          </select>
+        </div>
+
+        <button class="btn" type="submit">Register</button>
+      </form>
+
+      <p style="margin-top: 1rem;">
+        Already have an account?
+        <a href="{{ url_for('auth.login') }}">Log in</a>
+      </p>
+    </div>
+  </section>
+</div>
+
+{% endblock %}
