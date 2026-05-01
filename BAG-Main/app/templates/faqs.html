@@ -1,0 +1,72 @@
+{% extends "base.html" %}
+
+{% block title %}FAQs | BAG{% endblock %}
+
+{% block content %}
+<div class="faq-page">
+  <div class="faq-hero card">
+    <p class="faq-eyebrow">Support</p>
+    <h1>Frequently Asked Questions</h1>
+    <p class="faq-hero-text">
+      Find quick answers about BAG, financial aid, military benefits, and where to get help.
+    </p>
+  </div>
+
+  <div class="faq-layout">
+    <aside class="faq-sidebar card">
+      <button class="faq-tab active" type="button" data-faq-target="about-bag">
+        <span>About BAG</span>
+      </button>
+
+      <button class="faq-tab" type="button" data-faq-target="financial-aid">
+        <span>Financial Aid Questions</span>
+      </button>
+
+      <button class="faq-tab" type="button" data-faq-target="military-benefits">
+        <span>Military Benefit Questions</span>
+      </button>
+
+      <button class="faq-tab" type="button" data-faq-target="help-section">
+        <span>Help</span>
+      </button>
+    </aside>
+
+    <section class="faq-content">
+      <div class="faq-panel active" id="about-bag">
+        {% include "faq_sections/about_bag.html" %}
+      </div>
+
+      <div class="faq-panel" id="financial-aid">
+        {% include "faq_sections/financial_aid.html" %}
+      </div>
+
+      <div class="faq-panel" id="military-benefits">
+        {% include "faq_sections/military_benefits.html" %}
+      </div>
+
+      <div class="faq-panel" id="help-section">
+        {% include "faq_sections/help.html" %}
+      </div>
+    </section>
+  </div>
+</div>
+
+<script>
+  document.addEventListener("DOMContentLoaded", function () {
+    const tabs = document.querySelectorAll(".faq-tab");
+    const panels = document.querySelectorAll(".faq-panel");
+
+    tabs.forEach((tab) => {
+      tab.addEventListener("click", function () {
+        const targetId = this.dataset.faqTarget;
+
+        tabs.forEach((btn) => btn.classList.remove("active"));
+        panels.forEach((panel) => panel.classList.remove("active"));
+
+        this.classList.add("active");
+        document.getElementById(targetId).classList.add("active");
+      });
+    });
+  });
+</script>
+{% endblock %}

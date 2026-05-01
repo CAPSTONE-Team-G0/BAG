@@ -1,0 +1,44 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="card">
+  <h2>Add Expense</h2>
+  <form method="post" class="form grid">
+    <div>
+      <label>Type</label>
+      <select name="type">
+        <option value="expense">Expense</option>
+      </select>
+    </div>
+    <div>
+      <label>Date</label>
+      <input type="date" name="date" value="{{ today }}" required>
+    </div>
+    <div>
+      <label>Amount ($)</label>
+      <input type="number" step="0.01" min="0.01" name="amount" required>
+    </div>
+    <div class="full">
+      <label>Category (for expenses)</label>
+      <select name="category_id">
+        <option value="">(none)</option>
+        {% for c in categories %}
+          <option value="{{ c.id }}">{{ c.name }}</option>
+        {% endfor %}
+      </select>
+      <div class="hint">Income can leave category blank.</div>
+    </div>
+    <div class="full">
+  <label>Add New Category (optional)</label>
+  <input name="new_category" placeholder="Create a custom category here">
+  <div class="hint">If you enter a new category here, it will be used for this transaction.</div>
+</div>
+    <div class="full">
+      <label>Note (optional)</label>
+      <input name="note" placeholder="Groceries, gas, rent, etc.">
+    </div>
+    <div class="full">
+      <button class="btn" type="submit">Save Expense</button>
+    </div>
+  </form>
+</div>
+{% endblock %}
