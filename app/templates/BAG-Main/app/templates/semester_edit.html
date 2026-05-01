@@ -1,0 +1,38 @@
+{% extends "base.html" %}
+{% block content %}
+
+<div class="card">
+  <h2>Edit Semester</h2>
+
+  <form method="post" class="form grid">
+    <div class="full">
+      <label>Name</label>
+      <input name="name" value="{{ semester.name }}" required>
+    </div>
+
+    <div>
+      <label>Start date</label>
+      <input type="date" name="start_date" value="{{ semester.start_date }}" required>
+    </div>
+
+    <div>
+      <label>End date</label>
+      <input type="date" name="end_date" value="{{ semester.end_date }}" required>
+    </div>
+
+    <div>
+      <label>Weeks</label>
+      <input type="number" name="weeks" min="8" max="26" value="{{ semester.weeks }}" required>
+    </div>
+
+    <div class="full">
+      <button class="btn" type="submit">Save Changes</button>
+    </div>
+  </form>
+
+  <form method="post" action="{{ url_for('core.semester_delete', semester_id=semester.id) }}">
+    <button class="btn secondary" type="submit">Delete Semester</button>
+  </form>
+</div>
+
+{% endblock %}
