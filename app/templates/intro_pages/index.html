@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>BAG | Semester Budgeting</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/introstyle.css') }}">
+</head>
+<body>
+  <header class="site-header">
+    <nav class="navbar">
+      <a class="brand" href="{{ url_for('home.home') }}">
+        <div class="brand-badge">
+        <img src="{{ url_for('static', filename='images/logos/baglogo.png') }}" alt="BAG Logo">
+        </div>
+        <span>BAG Semester Budgeting</span>
+      </a>
+      <div class="nav-links">
+        <a class="active" href="{{ url_for('home.home') }}">Home</a>
+        <a href="{{ url_for('home.about') }}">About the team</a>
+        <a href="{{ url_for('auth.login') }}" class="button get-started">
+          Login
+        </a>
+        <a href="{{ url_for('auth.register') }}" class="button register">
+          Register
+        </a>
+      </div>
+    </nav>
+  </header>
+
+  <main>
+    <section class="hero">
+      <img src="{{ url_for('static', filename='images/logos/baglogomain.png') }}" alt="BAG Semester Budgeting logo">
+
+      <h1>Plan smarter. Spend with confidence.</h1>
+
+      <p>
+        BAG Semester Budgeting is a student-focused budgeting experience designed to help users track their money,
+        plan around financial aid, and stay aware of spending through the semester.
+      </p>
+
+      <div class="button-row">
+        <a href="{{ url_for('auth.login') }}" class="button get-started">
+          Get your bag!
+        </a>
+      </div>
+    </section>
+  </main>
+
+  <footer class="footer">
+    Bag© 2026 Team G0 • Capstone  
+  </footer>
+</body>
+</html>
