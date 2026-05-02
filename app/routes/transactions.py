@@ -84,3 +84,48 @@ def transaction_new():
         return redirect(url_for("dashboard.dashboard"))
 
     return render_template("transaction_new.html", categories=cats, today=date.today().isoformat())
+
+@bp.route("/transaction/edit/<int:transaction_id>", methods=["GET", "POST"])
+@login_required
+def transaction_edit(transaction_id):
+    db = get_db()
+
+    transaction = db.execute(
+        "SELECT * FROM transactions WHERE id = ?", (transaction_id,)
+    ).fetchone()
+
+    categories = db.execute(
+        "SELECT * FROM categories ORDER BY name"
+    ).fetchall()
+
+    if request.method == "POST":
+        db.execute("""
+            UPDATE transactions
+            SET type=?, amount_cents=?, date=?, category_id=?, note=?
+            WHERE id=?
+        """, (
+            request.form.get("type"),
+            money_to_cents(request.form.get("amount")),
+            request.form.get("date"),
+            request.form.get("category_id"),
+            request.form.get("note"),
+            transaction_id
+        ))
+
+        db.commit()
+        return redirect(url_for("dashboard.dashboard"))
+
+    return render_template(
+        "transaction_edit.html",
+        transaction=transaction,
+        categories=categories
+    )
+
+
+@bp.route("/transaction/delete/<int:transaction_id>", methods=["POST"])
+@login_required
+def transaction_delete(transaction_id):
+    db = get_db()
+    db.execute("DELETE FROM transactions WHERE id = ?", (transaction_id,))
+    db.commit()
+    return redirect(url_for("dashboard.dashboard"))

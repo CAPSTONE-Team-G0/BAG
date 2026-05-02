@@ -30,7 +30,7 @@
     </div>
 
     <div class="budgeting-header-actions">
-      <button type="button" class="btn secondary" onclick="toggleGoalForm(true)">
+      <button type="button" class="btn secondary" onclick="openCreateGoalForm()">
         + Add Goal
       </button>
     </div>
@@ -38,13 +38,16 @@
 
   <div id="goal-form-card" class="card budget-goal-form-card is-hidden">
     <div class="budget-form-header">
-      <h3>Create Goal</h3>
+      <h3 id="goal-form-title">Create Goal</h3>
     </div>
 
-    <form method="post" class="form grid">
+    <form method="post" class="form grid" id="goal-form">
+      <input type="hidden" name="action" id="goal-action" value="save">
+      <input type="hidden" name="goal_id" id="goal-id" value="">
+
       <div>
         <label>Category</label>
-        <select name="category_id" required>
+        <select name="category_id" id="goal-category-id" required>
           <option value="">Select a category</option>
           {% for c in categories %}
             <option value="{{ c.id }}">{{ c.name }}</option>
@@ -54,7 +57,7 @@
 
       <div>
         <label>Duration</label>
-        <select name="duration" required>
+        <select name="duration" id="goal-duration" required>
           <option value="">Select duration</option>
           <option value="weekly">Weekly</option>
           <option value="monthly">Monthly</option>
@@ -69,17 +72,18 @@
           step="0.01"
           min="0.01"
           name="goal_amount"
+          id="goal-amount"
           placeholder="500.00"
           required>
       </div>
 
       <div class="full budget-form-actions">
-        <button type="button" class="btn ghost" onclick="toggleGoalForm(false)">
-          Cancel
+        <button class="btn secondary" type="submit" id="goal-submit-btn">
+          Save Goal
         </button>
 
-        <button class="btn secondary" type="submit">
-          Save Goal
+        <button type="button" class="btn danger" onclick="closeGoalForm()">
+          Cancel
         </button>
       </div>
     </form>
@@ -87,7 +91,7 @@
 
   {% if not goals %}
     <div class="budget-empty-state">
-      <button type="button" class="budget-add-card" onclick="toggleGoalForm(true)">
+      <button type="button" class="budget-add-card" onclick="openCreateGoalForm()">
         <span class="budget-add-plus">+</span>
         <span class="budget-add-title">Add Goal</span>
         <span class="budget-add-text">
@@ -126,6 +130,26 @@
                   <div class="budget-goal-status {{ goal.status_class }}">
                     {{ goal.status }}
                   </div>
+                </div>
+
+                <div class="budget-goal-actions">
+                  <button
+                    type="button"
+                    class="btn secondary small"
+                    onclick="openEditGoalForm(
+                      '{{ goal.id }}',
+                      '{{ goal.category_id }}',
+                      '{{ goal.duration_value }}',
+                      '{{ goal.goal_amount }}'
+                    )">
+                    Edit
+                  </button>
+
+                  <form method="post" onsubmit="return confirm('Delete this budget goal?');">
+                    <input type="hidden" name="action" value="delete">
+                    <input type="hidden" name="goal_id" value="{{ goal.id }}">
+                    <button class="btn danger small" type="submit">Delete</button>
+                  </form>
                 </div>
 
                 <div class="budget-goal-name">{{ goal.category_name }}</div>
@@ -170,16 +194,52 @@
 </div>
 
 <script>
-function toggleGoalForm(show) {
-  const form = document.getElementById("goal-form-card");
-  if (!form) return;
+function showGoalForm() {
+  const formCard = document.getElementById("goal-form-card");
+  if (!formCard) return;
 
-  if (show) {
-    form.classList.remove("is-hidden");
-    form.scrollIntoView({ behavior: "smooth", block: "start" });
-  } else {
-    form.classList.add("is-hidden");
+  formCard.classList.remove("is-hidden");
+  formCard.scrollIntoView({ behavior: "smooth", block: "start" });
+}
+
+function closeGoalForm() {
+  const formCard = document.getElementById("goal-form-card");
+  const form = document.getElementById("goal-form");
+
+  if (form) {
+    form.reset();
   }
+
+  document.getElementById("goal-action").value = "save";
+  document.getElementById("goal-id").value = "";
+  document.getElementById("goal-form-title").textContent = "Create Goal";
+  document.getElementById("goal-submit-btn").textContent = "Save Goal";
+
+  if (formCard) {
+    formCard.classList.add("is-hidden");
+  }
+}
+
+function openCreateGoalForm() {
+  closeGoalForm();
+
+  document.getElementById("goal-action").value = "save";
+  document.getElementById("goal-form-title").textContent = "Create Goal";
+  document.getElementById("goal-submit-btn").textContent = "Save Goal";
+
+  showGoalForm();
+}
+
+function openEditGoalForm(goalId, categoryId, duration, amount) {
+  document.getElementById("goal-action").value = "edit";
+  document.getElementById("goal-id").value = goalId;
+  document.getElementById("goal-category-id").value = categoryId;
+  document.getElementById("goal-duration").value = duration;
+  document.getElementById("goal-amount").value = amount;
+  document.getElementById("goal-form-title").textContent = "Edit Goal";
+  document.getElementById("goal-submit-btn").textContent = "Update Goal";
+
+  showGoalForm();
 }
 </script>
 

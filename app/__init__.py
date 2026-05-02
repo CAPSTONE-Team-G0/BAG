@@ -22,6 +22,7 @@ def create_app():
     app.config.from_mapping(
         SECRET_KEY=os.environ.get("SECRET_KEY") or "dev_fallback",
         DATABASE="bag.sqlite3",
+        SESSION_PERMANENT=False,
     )
 
     init_db_app(app)

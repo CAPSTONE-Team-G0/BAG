@@ -1,4 +1,35 @@
 /* =========================
    Parent access / parent dashboard pages
-   Add page-specific styles here.
 ========================= */
+
+.permission-checkboxes {
+  margin-top: 1rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.permission-option {
+  display: grid;
+  grid-template-columns: 18px 1fr;
+  align-items: center;
+  column-gap: 0.65rem;
+  font-weight: 600;
+}
+
+.permission-option input[type="checkbox"] {
+  width: 16px;
+  height: 16px;
+  margin: 0;
+}
+
+.permission-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+}
+
+.permission-list span {
+  display: block;
+  line-height: 1.3;
+}

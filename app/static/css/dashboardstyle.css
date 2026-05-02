@@ -2,3 +2,35 @@
    Dashboard page
    Add page-specific styles here.
 ========================= */
+/* ===== Fix dashboard table alignment ===== */
+
+.table td,
+.table th {
+  vertical-align: middle;
+}
+
+.table td:first-child {
+  white-space: nowrap;
+  width: 120px;
+}
+
+.table td:last-child {
+  white-space: nowrap;
+}
+
+.table td form {
+  display: inline;
+}
+
+.table td .btn {
+  margin-right: 6px;
+}
+
+.btn.small {
+  padding: 6px 10px;
+  font-size: 12px;
+}
+
+.table td {
+  padding: 14px 10px;
+}

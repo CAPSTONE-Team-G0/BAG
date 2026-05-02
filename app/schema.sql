@@ -4,6 +4,8 @@ CREATE TABLE IF NOT EXISTS users (
   email TEXT UNIQUE NOT NULL,
   password_hash TEXT NOT NULL,
   role TEXT NOT NULL DEFAULT 'student' CHECK (role IN ('student', 'parent')),
+  security_question TEXT,
+  security_answer_hash TEXT,
   created_at TEXT NOT NULL DEFAULT (datetime('now'))
 );
 

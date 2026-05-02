@@ -123,10 +123,9 @@ def login():
             return render_template("login.html")
 
         session.clear()
+        session.permanent = False
         session["user_id"] = user["id"]
         session["user_role"] = user["role"]
-
-        flash("Welcome back.")
 
         if user["role"] == "parent":
             return redirect(url_for("parent_access.parent_access"))

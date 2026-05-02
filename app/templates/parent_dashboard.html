@@ -5,7 +5,6 @@
 
 {% block content %}
 
-
 <div class="card">
   <div class="row">
     <h2>Parent View</h2>
@@ -15,7 +14,7 @@
   <p class="muted">
     Viewing student:
     <strong>{{ student_name or student_email }}</strong>
-    {% if semester %}· Semester: <strong>{{ semester.name }}</strong>{% endif %}
+    {% if semester %}· Current Semester: <strong>{{ semester.name }}</strong>{% endif %}
   </p>
 </div>
 
@@ -35,11 +34,6 @@
   <div class="card">
     <h3>Remaining Funding</h3>
     <p><strong>Remaining:</strong> ${{ "%.2f"|format(remaining) }}</p>
-    <p><strong>Safe to spend this week:</strong> ${{ "%.2f"|format(safe_weekly) }}</p>
-
-    {% if projection_week %}
-      <p><strong>Projection:</strong> At the current pace, funds may run out around week {{ projection_week }}.</p>
-    {% endif %}
   </div>
   {% endif %}
 </div>
@@ -63,7 +57,12 @@
       <p class="muted">No categorized expenses yet.</p>
     {% else %}
       <table class="table">
-        <thead><tr><th>Category</th><th>Total</th></tr></thead>
+        <thead>
+          <tr>
+            <th>Category</th>
+            <th>Total</th>
+          </tr>
+        </thead>
         <tbody>
           {% for r in categories %}
             <tr>
@@ -82,7 +81,14 @@
       <p class="muted">No transactions yet.</p>
     {% else %}
       <table class="table">
-        <thead><tr><th>Date</th><th>Type</th><th>Category</th><th>Amount</th></tr></thead>
+        <thead>
+          <tr>
+            <th>Date</th>
+            <th>Type</th>
+            <th>Category</th>
+            <th>Amount</th>
+          </tr>
+        </thead>
         <tbody>
           {% for t in recent %}
             <tr>
