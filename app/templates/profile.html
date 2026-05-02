@@ -38,7 +38,6 @@
 
       <div class="profile-fields">
 
-        <!-- Display Name -->
         <div class="field-block full">
           <label for="display_name">Display Name</label>
           <input
@@ -50,7 +49,6 @@
           >
         </div>
 
-        <!-- State -->
         <div class="field-block">
           <label for="state">State</label>
           <select id="state" name="state" class="profile-input">
@@ -63,7 +61,6 @@
           </select>
         </div>
 
-        <!-- School -->
         <div class="field-block">
           <label for="school">School</label>
           <input
@@ -75,7 +72,6 @@
           >
         </div>
 
-        <!-- Student Status -->
         <div class="field-block">
           <label for="student_status">Student Status</label>
           <select id="student_status" name="student_status" class="profile-input">
@@ -85,7 +81,6 @@
           </select>
         </div>
 
-        <!-- Semester Weeks -->
         <div class="field-block">
           <label for="default_semester_weeks">Default Semester Weeks</label>
           <input
@@ -99,7 +94,37 @@
           >
         </div>
 
-        <!-- Save button -->
+        <!-- Security section hidden until Edit Profile is clicked -->
+        <div class="field-block full security-reset-section">
+          <h3>Security Question Reset</h3>
+          <p class="muted">
+            Update this if you want to reset your password using a security question later.
+          </p>
+        </div>
+
+        <div class="field-block full security-reset-section">
+          <label for="security_question">Security Question</label>
+          <select id="security_question" name="security_question" class="profile-input">
+            <option value="">Keep current security question</option>
+            <option value="What was the name of your first pet?" {% if profile and profile.security_question == "What was the name of your first pet?" %}selected{% endif %}>What was the name of your first pet?</option>
+            <option value="What city were you born in?" {% if profile and profile.security_question == "What city were you born in?" %}selected{% endif %}>What city were you born in?</option>
+            <option value="What is your mother's maiden name?" {% if profile and profile.security_question == "What is your mother's maiden name?" %}selected{% endif %}>What is your mother's maiden name?</option>
+            <option value="What was the name of your elementary school?" {% if profile and profile.security_question == "What was the name of your elementary school?" %}selected{% endif %}>What was the name of your elementary school?</option>
+            <option value="What is your favorite food?" {% if profile and profile.security_question == "What is your favorite food?" %}selected{% endif %}>What is your favorite food?</option>
+          </select>
+        </div>
+
+        <div class="field-block full security-reset-section">
+          <label for="security_answer">New Security Answer</label>
+          <input
+            type="text"
+            id="security_answer"
+            name="security_answer"
+            class="profile-input"
+            placeholder="Leave blank to keep current answer"
+          >
+        </div>
+
         <div class="full">
           <button class="btn" type="submit" id="save-profile-btn" style="display:none;">
             Save Profile
@@ -162,6 +187,7 @@
   const editBtn = document.getElementById("edit-profile-btn");
   const saveProfileBtn = document.getElementById("save-profile-btn");
   const inputs = document.querySelectorAll(".profile-input");
+  const securitySections = document.querySelectorAll(".security-reset-section");
 
   let pendingImage = hiddenInput.value || "";
   let isEditing = false;
@@ -198,7 +224,15 @@
 
   function setEditMode(enabled) {
     isEditing = enabled;
-    inputs.forEach(input => input.disabled = !enabled);
+
+    inputs.forEach(input => {
+      input.disabled = !enabled;
+    });
+
+    securitySections.forEach(section => {
+      section.style.display = enabled ? "block" : "none";
+    });
+
     saveProfileBtn.style.display = enabled ? "inline-flex" : "none";
     editBtn.textContent = enabled ? "Cancel Editing" : "Edit Profile";
   }
@@ -245,4 +279,5 @@
   setEditMode(false);
 })();
 </script>
+
 {% endblock %}

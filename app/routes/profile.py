@@ -1,5 +1,6 @@
 from flask import Blueprint, flash, redirect, render_template, request, url_for, current_app
 from werkzeug.utils import secure_filename
+from werkzeug.security import generate_password_hash
 from app.auth import login_required
 from app.common.constants import US_STATE_ABBREVIATIONS, PROFILE_IMAGE_CHOICES
 from app.common.session_utils import current_user_id
@@ -21,7 +22,18 @@ def allowed_file(filename: str) -> bool:
 def profile():
     db = get_db()
     uid = current_user_id()
-    row = db.execute("SELECT * FROM profiles WHERE user_id = ?", (uid,)).fetchone()
+
+    row = db.execute(
+        """
+        SELECT 
+            profiles.*,
+            users.security_question
+        FROM profiles
+        LEFT JOIN users ON users.id = profiles.user_id
+        WHERE profiles.user_id = ?
+        """,
+        (uid,),
+    ).fetchone()
 
     if request.method == "POST":
         display_name = (request.form.get("display_name") or "").strip()
@@ -30,6 +42,9 @@ def profile():
         student_status = (request.form.get("student_status") or "").strip()
         profile_image = (request.form.get("profile_image") or "").strip()
         weeks = request.form.get("default_semester_weeks") or "16"
+
+        security_question = (request.form.get("security_question") or "").strip()
+        security_answer = (request.form.get("security_answer") or "").strip().lower()
 
         uploaded_file = request.files.get("custom_profile_photo")
 
@@ -58,7 +73,6 @@ def profile():
 
         allowed_images = set(PROFILE_IMAGE_CHOICES + [""])
 
-        # If a custom file was uploaded, it wins over preset selection
         if uploaded_file and uploaded_file.filename:
             if not allowed_file(uploaded_file.filename):
                 flash("Please upload a valid image file (png, jpg, jpeg, gif, or webp).")
@@ -109,6 +123,19 @@ def profile():
             """,
             (uid, display_name, state, school, student_status, profile_image, weeks_i),
         )
+
+        if security_question:
+            db.execute(
+                "UPDATE users SET security_question = ? WHERE id = ?",
+                (security_question, uid),
+            )
+
+        if security_answer:
+            db.execute(
+                "UPDATE users SET security_answer_hash = ? WHERE id = ?",
+                (generate_password_hash(security_answer), uid),
+            )
+
         db.commit()
         flash("Profile saved.")
         return redirect(url_for("profile.profile"))
