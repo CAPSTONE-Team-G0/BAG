@@ -132,26 +132,6 @@
                   </div>
                 </div>
 
-                <div class="budget-goal-actions">
-                  <button
-                    type="button"
-                    class="btn secondary small"
-                    onclick="openEditGoalForm(
-                      '{{ goal.id }}',
-                      '{{ goal.category_id }}',
-                      '{{ goal.duration_value }}',
-                      '{{ goal.goal_amount }}'
-                    )">
-                    Edit
-                  </button>
-
-                  <form method="post" onsubmit="return confirm('Delete this budget goal?');">
-                    <input type="hidden" name="action" value="delete">
-                    <input type="hidden" name="goal_id" value="{{ goal.id }}">
-                    <button class="btn danger small" type="submit">Delete</button>
-                  </form>
-                </div>
-
                 <div class="budget-goal-name">{{ goal.category_name }}</div>
                 <div class="budget-goal-subtitle">{{ goal.subtitle }}</div>
 
@@ -181,6 +161,28 @@
                     {% endif %}
                   </span>
                   <span>{{ goal.percent }}% used</span>
+                </div>
+
+                <div class="budget-goal-actions">
+                  <button
+                    type="button"
+                    class="btn secondary small"
+                    onclick="openEditGoalForm(
+                      '{{ goal.id }}',
+                      '{{ goal.category_id }}',
+                      '{{ goal.duration_value }}',
+                      '{{ goal.goal_amount }}'
+                    )">
+                    Edit
+                  </button>
+
+                  <form method="post" onsubmit="return confirm('Delete this budget goal?');">
+                    <input type="hidden" name="action" value="delete">
+                    <input type="hidden" name="goal_id" value="{{ goal.id }}">
+                    <button class="btn delete-blue small" type="submit">
+  Delete
+</button>
+                  </form>
                 </div>
               </div>
             {% endfor %}

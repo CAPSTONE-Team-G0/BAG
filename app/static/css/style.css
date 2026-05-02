@@ -384,12 +384,18 @@ input::placeholder, textarea::placeholder{
 }
 
 .btn.secondary{
-  background:#ece7ee;
-  color:var(--primary);
+  background: transparent;
+  color: var(--accent);
+  border: 2px solid var(--accent);
+  font-weight: 600;
+  padding: 10px 16px;
+  border-radius: var(--pill);
+  transition: all 0.2s ease;
 }
 
 .btn.secondary:hover{
-  filter:brightness(1.01);
+  background: var(--accent);
+  color: #fff;
 }
 
 /* =========================
@@ -780,4 +786,15 @@ input::placeholder, textarea::placeholder{
   .welcome-btn{
     width:100%;
   }
+}
+/* Remove number input spinners (Chrome, Edge, Safari) */
+input[type="number"]::-webkit-outer-spin-button,
+input[type="number"]::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+/* Remove number input spinners (Firefox) */
+input[type="number"] {
+  -moz-appearance: textfield;
 }

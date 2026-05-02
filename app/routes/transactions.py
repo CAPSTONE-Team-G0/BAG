@@ -15,104 +15,147 @@ def transaction_new():
     db = get_db()
     uid = current_user_id()
     sid = active_semester_id()
+
     if sid is None:
         flash("Create and select a semester first.")
         return redirect(url_for("semesters.semester_new"))
 
     ensure_default_categories(db, uid)
-    cats = db.execute("SELECT * FROM categories WHERE user_id = ? ORDER BY name ASC", (uid,)).fetchall()
+    cats = db.execute(
+        "SELECT * FROM categories WHERE user_id = ? ORDER BY name ASC",
+        (uid,)
+    ).fetchall()
 
     if request.method == "POST":
-        ttype = (request.form.get("type") or "expense").strip()
+        ttype = "expense"
         amount = money_to_cents(request.form.get("amount") or "")
         tdate = (request.form.get("date") or "").strip()
-        
         category_id = request.form.get("category_id") or None
-        new_category = (request.form.get("new_category") or "").strip()
         note = (request.form.get("note") or "").strip()
 
-        if ttype not in ("income", "expense"):
-            flash("Invalid transaction type.")
-            return render_template("transaction_new.html", categories=cats, today=date.today().isoformat())
         if amount is None or amount == 0:
             flash("Amount must be greater than 0.")
             return render_template("transaction_new.html", categories=cats, today=date.today().isoformat())
+
         if not tdate:
             flash("Date is required.")
             return render_template("transaction_new.html", categories=cats, today=date.today().isoformat())
+
         try:
             date.fromisoformat(tdate)
         except Exception:
             flash("Invalid date.")
             return render_template("transaction_new.html", categories=cats, today=date.today().isoformat())
 
+        if not category_id:
+            flash("Please select a category.")
+            return render_template("transaction_new.html", categories=cats, today=date.today().isoformat())
+
         cat_id = None
 
-        if new_category:
-            db.execute(
-                "INSERT OR IGNORE INTO categories (user_id, name) VALUES (?, ?)",
-                (uid, new_category),
-            )
-            db.commit()
-
-            created_cat = db.execute(
-                "SELECT id FROM categories WHERE user_id = ? AND name = ?",
-                (uid, new_category),
+        try:
+            cid = int(category_id)
+            ok = db.execute(
+                "SELECT id, name FROM categories WHERE id = ? AND user_id = ?",
+                (cid, uid)
             ).fetchone()
 
-            if created_cat:
-                cat_id = created_cat["id"]
+            if ok:
+                cat_id = cid
 
-        elif category_id:
-            try:
-                cid = int(category_id)
-                ok = db.execute(
-                    "SELECT id FROM categories WHERE id = ? AND user_id = ?",
-                    (cid, uid)
-                ).fetchone()
-                if ok:
-                    cat_id = cid
-            except Exception:
-                cat_id = None
+                if ok["name"].lower() == "other" and not note:
+                    flash("Please add a note when selecting 'Other'.")
+                    return render_template("transaction_new.html", categories=cats, today=date.today().isoformat())
+
+        except Exception:
+            cat_id = None
+
+        if cat_id is None:
+            flash("Please select a valid category.")
+            return render_template("transaction_new.html", categories=cats, today=date.today().isoformat())
 
         db.execute(
-            "INSERT INTO transactions (user_id, semester_id, type, amount_cents, date, category_id, note) VALUES (?, ?, ?, ?, ?, ?, ?)",
+            """
+            INSERT INTO transactions
+            (user_id, semester_id, type, amount_cents, date, category_id, note)
+            VALUES (?, ?, ?, ?, ?, ?, ?)
+            """,
             (uid, sid, ttype, amount, tdate, cat_id, note),
         )
+
         db.commit()
-        flash("Transaction saved.")
+        flash("Expense saved.")
         return redirect(url_for("dashboard.dashboard"))
 
-    return render_template("transaction_new.html", categories=cats, today=date.today().isoformat())
+    return render_template(
+        "transaction_new.html",
+        categories=cats,
+        today=date.today().isoformat()
+    )
+
 
 @bp.route("/transaction/edit/<int:transaction_id>", methods=["GET", "POST"])
 @login_required
 def transaction_edit(transaction_id):
     db = get_db()
+    uid = current_user_id()
 
     transaction = db.execute(
-        "SELECT * FROM transactions WHERE id = ?", (transaction_id,)
+        "SELECT * FROM transactions WHERE id = ? AND user_id = ?",
+        (transaction_id, uid)
     ).fetchone()
 
+    if not transaction:
+        flash("Transaction not found.")
+        return redirect(url_for("dashboard.dashboard"))
+
     categories = db.execute(
-        "SELECT * FROM categories ORDER BY name"
+        "SELECT * FROM categories WHERE user_id = ? ORDER BY name",
+        (uid,)
     ).fetchall()
 
     if request.method == "POST":
-        db.execute("""
+        category_id = request.form.get("category_id")
+        note = (request.form.get("note") or "").strip()
+        amount = money_to_cents(request.form.get("amount"))
+        tdate = request.form.get("date")
+
+        if amount is None or amount == 0:
+            flash("Amount must be greater than 0.")
+            return render_template("transaction_edit.html", transaction=transaction, categories=categories)
+
+        if not category_id:
+            flash("Please select a category.")
+            return render_template("transaction_edit.html", transaction=transaction, categories=categories)
+
+        cat_name = db.execute(
+            "SELECT name FROM categories WHERE id = ? AND user_id = ?",
+            (category_id, uid)
+        ).fetchone()
+
+        if cat_name and cat_name["name"].lower() == "other" and not note:
+            flash("Please add a note when selecting 'Other'.")
+            return render_template("transaction_edit.html", transaction=transaction, categories=categories)
+
+        db.execute(
+            """
             UPDATE transactions
             SET type=?, amount_cents=?, date=?, category_id=?, note=?
-            WHERE id=?
-        """, (
-            request.form.get("type"),
-            money_to_cents(request.form.get("amount")),
-            request.form.get("date"),
-            request.form.get("category_id"),
-            request.form.get("note"),
-            transaction_id
-        ))
+            WHERE id=? AND user_id=?
+            """,
+            (
+                "expense",
+                amount,
+                tdate,
+                category_id,
+                note,
+                transaction_id,
+                uid
+            )
+        )
 
         db.commit()
+        flash("Expense updated.")
         return redirect(url_for("dashboard.dashboard"))
 
     return render_template(
@@ -126,6 +169,13 @@ def transaction_edit(transaction_id):
 @login_required
 def transaction_delete(transaction_id):
     db = get_db()
-    db.execute("DELETE FROM transactions WHERE id = ?", (transaction_id,))
+    uid = current_user_id()
+
+    db.execute(
+        "DELETE FROM transactions WHERE id = ? AND user_id = ?",
+        (transaction_id, uid)
+    )
+
     db.commit()
+    flash("Transaction deleted.")
     return redirect(url_for("dashboard.dashboard"))

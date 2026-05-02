@@ -9,13 +9,7 @@
   <h2>Edit Transaction</h2>
 
   <form method="post" class="form grid">
-    <div>
-      <label>Type</label>
-      <select name="type">
-        <option value="expense" {% if transaction.type == 'expense' %}selected{% endif %}>Expense</option>
-        <option value="income" {% if transaction.type == 'income' %}selected{% endif %}>Income</option>
-      </select>
-    </div>
+    <input type="hidden" name="type" value="{{ transaction.type }}">
 
     <div>
       <label>Date</label>
@@ -36,8 +30,10 @@
 
     <div class="full">
       <label>Category</label>
-      <select name="category_id">
-        <option value="">(none)</option>
+      <select name="category_id" required>
+        <option value="" disabled {% if not transaction.category_id %}selected{% endif %}>
+          Select category
+        </option>
         {% for c in categories %}
           <option value="{{ c.id }}" {% if transaction.category_id == c.id %}selected{% endif %}>
             {{ c.name }}
@@ -60,4 +56,5 @@
     <button class="btn secondary" type="submit">Delete Transaction</button>
   </form>
 </div>
+
 {% endblock %}

@@ -14,11 +14,21 @@ def _goal_date_range(duration: str, semester_row=None):
     today = date.today()
 
     if duration == "weekly":
-        start_date = today
-        end_date = today + timedelta(days=6)
+        # Monday → Sunday
+        start_date = today - timedelta(days=today.weekday())
+        end_date = start_date + timedelta(days=6)
+
     elif duration == "monthly":
-        start_date = today
-        end_date = today + timedelta(days=29)
+        # First → last day of month
+        start_date = today.replace(day=1)
+
+        if today.month == 12:
+            next_month = today.replace(year=today.year + 1, month=1, day=1)
+        else:
+            next_month = today.replace(month=today.month + 1, day=1)
+
+        end_date = next_month - timedelta(days=1)
+
     elif duration == "semester":
         if semester_row:
             start_date = date.fromisoformat(semester_row["start_date"])
@@ -26,6 +36,7 @@ def _goal_date_range(duration: str, semester_row=None):
         else:
             start_date = today
             end_date = today + timedelta(days=111)
+
     else:
         return None, None
 
@@ -233,10 +244,11 @@ def categories():
         JOIN categories c
           ON c.id = bg.category_id
         LEFT JOIN transactions t
-          ON t.user_id = bg.user_id
-         AND t.semester_id = bg.semester_id
-         AND t.category_id = bg.category_id
-         AND t.type = 'expense'
+        ON t.user_id = bg.user_id
+        AND t.semester_id = bg.semester_id
+        AND t.category_id = bg.category_id
+        AND t.type = 'expense'
+        AND date(t.date) BETWEEN date(bg.start_date) AND date(bg.end_date)
         WHERE bg.user_id = ?
           AND bg.semester_id = ?
           AND bg.is_active = 1

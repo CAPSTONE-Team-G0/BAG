@@ -90,22 +90,35 @@
 
         {% if session.get('user_id') %}
         <div class="topbar-right">
-          <div class="topbar-user">
-            <div class="topbar-user-text">
-              <div class="topbar-user-name">{{ nav_display_name }}</div>
-            </div>
+  <div class="topbar-user">
 
-            {% if nav_profile_image %}
-              <div class="topbar-avatar topbar-avatar-image">
-                <img src="{{ nav_profile_image }}" alt="Profile photo">
-              </div>
-            {% else %}
-              <div class="topbar-avatar">{{ nav_avatar_letter }}</div>
-            {% endif %}
-          </div>
-        </div>
+    <div class="topbar-user-text">
+      <div class="topbar-user-name">
+        {% if session.get('user_role') == 'parent' %}
+          Parent Portal
+        {% else %}
+          {{ nav_display_name }}
         {% endif %}
-      </header>
+      </div>
+    </div>
+
+    {% if session.get('user_role') == 'parent' %}
+      <div class="topbar-avatar topbar-avatar-image">
+        <img src="{{ url_for('static', filename='images/logos/baglogo.png') }}" alt="BAG Logo">
+      </div>
+    {% elif nav_profile_image %}
+      <div class="topbar-avatar topbar-avatar-image">
+        <img src="{{ nav_profile_image }}" alt="Profile photo">
+      </div>
+    {% else %}
+      <div class="topbar-avatar">{{ nav_avatar_letter }}</div>
+    {% endif %}
+
+  </div>
+</div>
+{% endif %}
+
+</header>
 
       <main class="page-content">
         {% with messages = get_flashed_messages() %}
