@@ -1,185 +1,195 @@
-# BAG — Semester-Based Financial Pacing App
+# 🎒 BAG — Budgeting Application for Students
 
-BAG is a Flask + SQLite web app that helps students manage financial aid, track expenses, and monitor spending across a semester. It allows users to create an account, set up a profile, create semesters, add aid and transactions, and view a dashboard that compares spending pace against semester progress.
+BAG (Budgeting Application for Students) is a Flask-based web application designed to help students manage their finances throughout a semester. It allows users to track funding, expenses, and spending habits in a structured and visual way.
 
-## Features
+---
 
-* User registration, login, and logout
-* Profile setup
-* Semester creation and selection
-* Financial aid entry
-* Income and expense tracking
-* Category tracking
-* Dashboard with:
+## 🚀 Features
 
-  * current week of semester
-  * percent of semester elapsed
-  * percent of funds spent
-  * safe-to-spend amount
-  * pacing alerts
-  * category totals
-  * run-out projection
+* 📊 Dashboard with real-time financial insights
+* 💰 Add and manage funding (financial aid, income, etc.)
+* 💸 Track expenses by category
+* 🧾 Statements page (full transaction history with income + expenses)
+* 📅 Semester-based budgeting
+* 📈 Spending analysis and projections
+* 👨‍👩‍👧 Parent access view (optional)
+* 🔐 Secure login with authentication
 
-## Tech Stack
+---
 
-* Python
-* Flask
-* Jinja2
-* SQLite
-* HTML/CSS
+## 🖥️ Requirements
 
-## Project Structure
+* Python 3.10 or higher
+* pip (Python package manager)
+* Virtual environment (recommended)
 
-```
-BAG/
-│
-├── app/
-├── instance/
-├── tests/
-├── requirements.txt
-├── wsgi.py
-├── README.md
-└── README_MODULARIZED.md
+---
+
+## ⚙️ Setup Instructions
+
+### 1. Clone the repository
+
+```bash
+git clone <your-repo-url>
+cd BAG-project-folder
 ```
 
-## Requirements
+---
 
-Before running the program, install:
+### 2. Create and activate a virtual environment
 
-* Python 3.10 or newer
-* pip
-* VS Code or another code editor
+#### Windows (PowerShell)
 
-## Setup Instructions
-
-### 1. Clone or download the repository
-
-```
-git clone https://github.com/CAPSTONE-Team-G0/BAG.git
-cd BAG
-```
-
-### 2. Create a virtual environment
-
-#### Windows PowerShell
-
-```
-python -m venv venv
-venv\Scripts\Activate.ps1
-```
-
-If PowerShell asks whether to trust the script, choose:
-
-```
-R = Run once
-```
-
-#### Windows Command Prompt
-
-```
+```powershell
 python -m venv venv
 venv\Scripts\activate
 ```
 
+#### Mac/Linux
+
+```bash
+python3 -m venv venv
+source venv/bin/activate
+```
+
+---
+
 ### 3. Install dependencies
 
-```
+```bash
 pip install -r requirements.txt
 ```
 
-## Initialize the Database
+---
 
-Before running the app for the first time, initialize the database.
+### 4. Set environment variables
 
-### Windows PowerShell
-
-```
-$env:FLASK_APP="app"
-flask init-db
-```
-
-### Windows Command Prompt
+Create a `.env` file in the root folder and add:
 
 ```
-set FLASK_APP=app
-flask init-db
+SECRET_KEY=your_secret_key_here
 ```
 
-## Run the Application
+---
 
-### PowerShell
+### 5. Initialize the database
 
-```
-flask --app app --debug run
-```
-
-### Command Prompt
-
-```
-flask --app app --debug run
+```bash
+flask --app app init-db
 ```
 
-Then open this in your browser:
+---
+
+### 6. Run the application
+
+```bash
+flask run
+```
+
+---
+
+### 7. Open the application
+
+Open your browser and go to:
 
 ```
-http://127.0.0.1:5000
+http://127.0.0.1:5000/
 ```
 
-## How to Use the App
+---
+
+## 👤 How to Use
 
 1. Register a new account
 2. Log in
 3. Create your profile
-4. Create a semester
-5. Select the semester
-6. Add financial aid
-7. Add income and expense transactions
-8. Open the dashboard to review your financial pace
+4. Add a semester
+5. Add funding (financial aid, income)
+6. Add expenses
+7. Use the navigation sidebar to access:
 
-## Running Tests
+   * Dashboard (summary)
+   * Statements (full financial history)
+   * Budgeting (categories and limits)
 
-```
-pytest -q
-```
+---
 
-## Troubleshooting
+## 🧾 Statements Page
 
-### Python not found
+The Statements page provides a complete financial history:
 
-Make sure Python is installed and added to PATH.
+* Shows both income and expenses
+* Displays transaction type (Income / Expense)
+* Color-coded amounts:
 
-### Virtual environment will not activate
+  * Green = Income
+  * Red = Expense
+* Allows editing and deleting entries
+* Combines funding and spending into one view (like a bank statement)
 
-Use Command Prompt instead of PowerShell, or allow the script to run once in PowerShell.
+---
 
-### Flask app will not start
-
-Make sure you installed dependencies:
-
-```
-pip install -r requirements.txt
-```
-
-### Database errors
-
-Run:
+## 📁 Project Structure
 
 ```
-flask init-db
+app/
+│
+├── routes/
+│   ├── dashboard.py
+│   ├── transactions.py
+│   ├── aid.py
+│   ├── statements.py
+│   └── ...
+│
+├── templates/
+│   ├── base.html
+│   ├── dashboard.html
+│   ├── statements.html
+│   └── ...
+│
+├── static/
+│   ├── css/
+│   ├── images/
+│   └── icons/
+│
+├── schema.sql
+├── db.py
+└── __init__.py
 ```
 
-before starting the app.
+---
 
-### Internal Server Error after login
+## 🛠️ Technologies Used
 
-Check the VS Code terminal for the exact error message and update any outdated route names (for example, replace `core.dashboard` with `dashboard.dashboard`).
+* Python (Flask)
+* SQLite
+* HTML / CSS (Jinja templates)
+* JavaScript (Chart.js for visualizations)
 
-## Notes
+---
 
-* Currency values are stored in cents
-* The active semester is stored in session data
-* SQLite is used for local storage
+## ⚠️ Notes
 
-## Contributors
+* This application runs on a development server (not for production use)
+* The database must be initialized before running
+* Restart Flask after making changes to code
 
-CAPSTONE-Team-G0
+---
+
+## 👩‍💻 Author
+
+Joey Ackerman-Lowery
+Computer Programming Student
+
+---
+
+## 🤖 AI Usage
+
+AI was used to assist with:
+
+* Debugging and troubleshooting
+* Code structure improvements
+* Feature development (Statements page and enhancements)
+* Documentation writing
+
+All code was reviewed, tested, and integrated by the developer.
