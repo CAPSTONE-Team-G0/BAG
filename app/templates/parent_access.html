@@ -5,7 +5,6 @@
 
 {% block content %}
 
-
 <div class="card">
   {% if session.get('user_role') == 'student' %}
     <h2>Manage Parent Access</h2>
@@ -37,28 +36,25 @@
         required
       >
 
-      <div style="margin-top: 1rem;">
-        <label>
+      <div class="permission-checkboxes">
+        <label class="permission-option">
           <input type="checkbox" name="can_view_on_track" checked>
-          Allow parent to view on-track status
+          <span>Allow parent to view on-track status</span>
         </label>
-        <br>
 
-        <label>
+        <label class="permission-option">
           <input type="checkbox" name="can_view_remaining_funding" checked>
-          Allow parent to view remaining funding
+          <span>Allow parent to view remaining funding</span>
         </label>
-        <br>
 
-        <label>
+        <label class="permission-option">
           <input type="checkbox" name="can_view_total_funds">
-          Allow parent to view total funds
+          <span>Allow parent to view total funds</span>
         </label>
-        <br>
 
-        <label>
+        <label class="permission-option">
           <input type="checkbox" name="can_view_spending_breakdown">
-          Allow parent to view spending breakdown
+          <span>Allow parent to view spending breakdown</span>
         </label>
       </div>
 
@@ -87,10 +83,20 @@
             <tr>
               <td>{{ p.parent_email }}</td>
               <td>
-                {% if p.can_view_on_track %}On-track {% endif %}
-                {% if p.can_view_remaining_funding %}Remaining {% endif %}
-                {% if p.can_view_total_funds %}Totals {% endif %}
-                {% if p.can_view_spending_breakdown %}Breakdown{% endif %}
+                <div class="permission-list">
+                  {% if p.can_view_on_track %}
+                    <span>On-track</span>
+                  {% endif %}
+                  {% if p.can_view_remaining_funding %}
+                    <span>Remaining</span>
+                  {% endif %}
+                  {% if p.can_view_total_funds %}
+                    <span>Totals</span>
+                  {% endif %}
+                  {% if p.can_view_spending_breakdown %}
+                    <span>Breakdown</span>
+                  {% endif %}
+                </div>
               </td>
               <td>
                 <form method="post">

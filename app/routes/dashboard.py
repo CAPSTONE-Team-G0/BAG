@@ -1,5 +1,5 @@
 from datetime import date
-from flask import Blueprint, render_template, flash, redirect, url_for
+from flask import Blueprint, render_template
 from app.auth import login_required, student_required
 from app.common.session_utils import current_user_id
 from app.db import get_db
@@ -39,12 +39,16 @@ def dashboard():
         return render_template("dashboard_empty.html", profile=prof)
 
     sid = int(sem["id"])
-
     data = load_dashboard_data(db, uid, sid, sem)
+
+    semester_percent = data.get("semester_percent", 0)
+    funds_percent = data.get("funds_percent", 0)
 
     return render_template(
         "dashboard.html",
         profile=prof,
         semester=sem,
+        semester_percent=semester_percent,
+        funds_percent=funds_percent,
         **data
     )

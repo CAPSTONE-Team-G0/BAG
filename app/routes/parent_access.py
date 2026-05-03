@@ -1,3 +1,4 @@
+from datetime import date
 from flask import Blueprint, flash, redirect, render_template, request, url_for
 
 from app.auth import login_required
@@ -148,19 +149,23 @@ def parent_view(student_id: int):
         (student_id,),
     ).fetchone()
 
+    today = date.today().isoformat()
+
     semester = db.execute(
         """
         SELECT *
         FROM semesters
         WHERE user_id = ?
-        ORDER BY created_at DESC, id DESC
+          AND date(start_date) <= date(?)
+          AND date(end_date) >= date(?)
+        ORDER BY date(start_date) DESC, id DESC
         LIMIT 1
         """,
-        (student_id,),
+        (student_id, today, today),
     ).fetchone()
 
     if not semester:
-        flash("That student does not have a semester set up yet.")
+        flash("That student does not have a current semester set up yet.")
         return redirect(url_for("parent_access.parent_access"))
 
     data = load_dashboard_data(db, student_id, semester["id"], semester)
@@ -176,7 +181,6 @@ def parent_view(student_id: int):
         total_funds=data["total_funds"],
         spent=data["spent"],
         remaining=data["remaining"],
-        safe_weekly=data["safe_weekly"],
         alerts=data["alerts"],
         categories=data["categories"],
         projection_week=data["projection_week"],

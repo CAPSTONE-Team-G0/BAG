@@ -11,6 +11,7 @@ from .routes.categories import bp as categories_bp
 from .routes.dashboard import bp as dashboard_bp
 from .routes.parent_access import bp as parent_access_bp
 from .routes.faqs import bp as faqs_bp
+from .routes.statements import bp as statements_bp
 import os
 from dotenv import load_dotenv
 
@@ -22,6 +23,7 @@ def create_app():
     app.config.from_mapping(
         SECRET_KEY=os.environ.get("SECRET_KEY") or "dev_fallback",
         DATABASE="bag.sqlite3",
+        SESSION_PERMANENT=False,
     )
 
     init_db_app(app)
@@ -37,6 +39,7 @@ def create_app():
     app.register_blueprint(dashboard_bp)
     app.register_blueprint(parent_access_bp)
     app.register_blueprint(faqs_bp)
+    app.register_blueprint(statements_bp)
 
     @app.context_processor
     def inject_user_profile():

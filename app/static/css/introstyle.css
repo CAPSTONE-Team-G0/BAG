@@ -168,16 +168,16 @@ main{
 }
 
 .hero p,.page-hero p{
-  max-width:760px;
-  margin:0 auto;
+  max-width:100%;
+  margin:0;
   color:var(--muted);
   font-size:1.02rem;
   line-height:1.75;
 }
 
-.page-hero p{
-  margin:0;
-  max-width:800px;
+.page-hero{
+  max-width:1100px;
+  margin:0 auto 26px;
 }
 
 .button-row{
@@ -467,4 +467,18 @@ main{
 .button.register:hover {
   background: #a3c85b;
   transform: translateY(-2px);
+}
+
+/* Center team member names, roles, and buttons under photos */
+.person-card {
+  text-align: center;
+}
+
+.person-card h3,
+.person-card small {
+  text-align: center;
+}
+
+.person-card .button {
+  margin: 12px auto 0;
 }

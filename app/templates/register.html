@@ -4,11 +4,12 @@
 {% endblock %}
 
 {% block content %}
+{% include "partials/auth_nav.html" %}
 
 <div class="login-split-page">
   <section class="login-welcome-panel">
     <img
-      src="{{ url_for('static', filename='images/logos/baglogomain.png') }}"
+      src="{{ url_for('static', filename='images/logos/baglogotransparent.png') }}"
       alt="BAG Semester Budgeting Logo"
       class="login-main-logo"
     >
@@ -54,6 +55,29 @@
             <option value="student">Student</option>
             <option value="parent">Parent / Guardian</option>
           </select>
+        </div>
+
+        <div class="form-group">
+          <label for="security_question">Security Question</label>
+          <select id="security_question" name="security_question" required>
+            <option value="">Choose a security question</option>
+            <option value="What was the name of your first pet?">What was the name of your first pet?</option>
+            <option value="What city were you born in?">What city were you born in?</option>
+            <option value="What is your mother's maiden name?">What is your mother's maiden name?</option>
+            <option value="What was the name of your elementary school?">What was the name of your elementary school?</option>
+            <option value="What is your favorite food?">What is your favorite food?</option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label for="security_answer">Security Answer</label>
+          <input
+            type="text"
+            id="security_answer"
+            name="security_answer"
+            required
+            placeholder="Enter your answer"
+          >
         </div>
 
         <button class="btn" type="submit">Register</button>

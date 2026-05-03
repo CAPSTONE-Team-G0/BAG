@@ -72,8 +72,11 @@ a:hover{
 }
 
 .sidebar-brand{
-  padding:0 30px;
-  margin-bottom:34px;
+  padding:0 30px 10px;   /* 👈 reduce bottom space */
+  margin-bottom:10px;    /* 👈 this was pushing everything down */
+  display:flex;
+  flex-direction:column;
+  align-items:center;
 }
 
 .logo{
@@ -84,10 +87,11 @@ a:hover{
 }
 
 .sidebar-tagline{
-  margin-top:8px;
+  margin-top:0;   /* 👈 removes extra spacing */
   color:rgba(255,255,255,.72);
   font-size:11px;
   letter-spacing:.18em;
+  text-align:center;
 }
 
 .sidebar-nav{
@@ -139,11 +143,11 @@ a:hover{
 }
 
 .sidebar-logo{
-  width:120px;
+  width:300px;
   height:auto;
   display:block;
+  margin:0 auto -60px;
 }
-
 .logo{
   text-decoration:none;
 }
@@ -286,6 +290,32 @@ a:hover{
   gap:12px;
 }
 
+/* =========================
+   Checkbox alignment (GLOBAL)
+========================= */
+
+.checkbox-row {
+  display: grid;
+  grid-template-columns: 20px 1fr;
+  align-items: center;
+  column-gap: 0.6rem;
+  width: 100%;
+  font-weight: 600;
+}
+
+.checkbox-row input[type="checkbox"] {
+  width: 16px;
+  height: 16px;
+  margin: 0;
+  padding: 0;
+  box-shadow: none;
+  transform: translateY(1px);
+}
+
+.checkbox-row span {
+  line-height: 1.4;
+}
+
 .form.grid{
   display:grid;
   grid-template-columns:repeat(2,minmax(0,1fr));
@@ -354,12 +384,18 @@ input::placeholder, textarea::placeholder{
 }
 
 .btn.secondary{
-  background:#ece7ee;
-  color:var(--primary);
+  background: transparent;
+  color: var(--accent);
+  border: 2px solid var(--accent);
+  font-weight: 600;
+  padding: 10px 16px;
+  border-radius: var(--pill);
+  transition: all 0.2s ease;
 }
 
 .btn.secondary:hover{
-  filter:brightness(1.01);
+  background: var(--accent);
+  color: #fff;
 }
 
 /* =========================
@@ -750,4 +786,15 @@ input::placeholder, textarea::placeholder{
   .welcome-btn{
     width:100%;
   }
+}
+/* Remove number input spinners (Chrome, Edge, Safari) */
+input[type="number"]::-webkit-outer-spin-button,
+input[type="number"]::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+/* Remove number input spinners (Firefox) */
+input[type="number"] {
+  -moz-appearance: textfield;
 }

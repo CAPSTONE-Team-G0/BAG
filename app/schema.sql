@@ -4,6 +4,8 @@ CREATE TABLE IF NOT EXISTS users (
   email TEXT UNIQUE NOT NULL,
   password_hash TEXT NOT NULL,
   role TEXT NOT NULL DEFAULT 'student' CHECK (role IN ('student', 'parent')),
+  security_question TEXT,
+  security_answer_hash TEXT,
   created_at TEXT NOT NULL DEFAULT (datetime('now'))
 );
 
@@ -14,6 +16,7 @@ CREATE TABLE IF NOT EXISTS profiles (
   state TEXT,
   school TEXT,
   student_status TEXT,
+  major_program TEXT, 
   profile_image TEXT,
   default_semester_weeks INTEGER NOT NULL DEFAULT 16,
   FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE

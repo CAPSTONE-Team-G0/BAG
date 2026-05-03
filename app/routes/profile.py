@@ -1,5 +1,6 @@
 from flask import Blueprint, flash, redirect, render_template, request, url_for, current_app
 from werkzeug.utils import secure_filename
+from werkzeug.security import generate_password_hash
 from app.auth import login_required
 from app.common.constants import US_STATE_ABBREVIATIONS, PROFILE_IMAGE_CHOICES
 from app.common.session_utils import current_user_id
@@ -21,7 +22,18 @@ def allowed_file(filename: str) -> bool:
 def profile():
     db = get_db()
     uid = current_user_id()
-    row = db.execute("SELECT * FROM profiles WHERE user_id = ?", (uid,)).fetchone()
+
+    row = db.execute(
+        """
+        SELECT 
+            profiles.*,
+            users.security_question
+        FROM profiles
+        LEFT JOIN users ON users.id = profiles.user_id
+        WHERE profiles.user_id = ?
+        """,
+        (uid,),
+    ).fetchone()
 
     if request.method == "POST":
         display_name = (request.form.get("display_name") or "").strip()
@@ -29,23 +41,12 @@ def profile():
         school = (request.form.get("school") or "").strip()
         student_status = (request.form.get("student_status") or "").strip()
         profile_image = (request.form.get("profile_image") or "").strip()
-        weeks = request.form.get("default_semester_weeks") or "16"
+        major_program = (request.form.get("major_program") or "").strip()
+
+        security_question = (request.form.get("security_question") or "").strip()
+        security_answer = (request.form.get("security_answer") or "").strip().lower()
 
         uploaded_file = request.files.get("custom_profile_photo")
-
-        try:
-            weeks_i = int(weeks)
-        except Exception:
-            weeks_i = 16
-
-        if weeks_i < 8 or weeks_i > 26:
-            flash("Default semester weeks must be between 8 and 26.")
-            return render_template(
-                "profile.html",
-                profile=row,
-                states=US_STATE_ABBREVIATIONS,
-                profile_image_choices=PROFILE_IMAGE_CHOICES,
-            )
 
         if student_status not in ("", "Full-time", "Part-time"):
             flash("Please choose a valid student status.")
@@ -58,10 +59,9 @@ def profile():
 
         allowed_images = set(PROFILE_IMAGE_CHOICES + [""])
 
-        # If a custom file was uploaded, it wins over preset selection
         if uploaded_file and uploaded_file.filename:
             if not allowed_file(uploaded_file.filename):
-                flash("Please upload a valid image file (png, jpg, jpeg, gif, or webp).")
+                flash("Please upload a valid image file.")
                 return render_template(
                     "profile.html",
                     profile=row,
@@ -95,8 +95,8 @@ def profile():
                 state,
                 school,
                 student_status,
-                profile_image,
-                default_semester_weeks
+                major_program,
+                profile_image
             )
             VALUES (?, ?, ?, ?, ?, ?, ?)
             ON CONFLICT(user_id) DO UPDATE SET
@@ -104,11 +104,24 @@ def profile():
                 state=excluded.state,
                 school=excluded.school,
                 student_status=excluded.student_status,
-                profile_image=excluded.profile_image,
-                default_semester_weeks=excluded.default_semester_weeks
+                major_program=excluded.major_program,
+                profile_image=excluded.profile_image
             """,
-            (uid, display_name, state, school, student_status, profile_image, weeks_i),
+            (uid, display_name, state, school, student_status, major_program, profile_image),
         )
+
+        if security_question:
+            db.execute(
+                "UPDATE users SET security_question = ? WHERE id = ?",
+                (security_question, uid),
+            )
+
+        if security_answer:
+            db.execute(
+                "UPDATE users SET security_answer_hash = ? WHERE id = ?",
+                (generate_password_hash(security_answer), uid),
+            )
+
         db.commit()
         flash("Profile saved.")
         return redirect(url_for("profile.profile"))

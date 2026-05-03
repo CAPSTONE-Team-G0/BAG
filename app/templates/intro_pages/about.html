@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>About the Team | BAG</title>
-  <link rel="stylesheet" href="static/css/introstyle.css">
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/introstyle.css') }}">
 </head>
 <body>
   <header class="site-header">
@@ -33,10 +33,15 @@
     <section class="page-hero">
       <h1>About the Team</h1>
       <p>
-        We’re a small team of IT students who came together with a graphic design student to build BAG for our capstone project.
-        Three team members focused on programming, one focused on database work, and one helped shape the visual identity and branding.
-        We’re all graduating soon, but we hope to keep improving BAG beyond this project.
-      </p>
+  We’re a team of graduating IT students who came together to build BAG (Budgeting Aid Guide) as our capstone project. 
+  Our group combines strengths in back-end development, front-end design, database management, and visual design to create a complete and functional application.
+
+  Each team member contributed in a meaningful way—from building core features and structuring the database to designing the user interface 
+  and shaping the overall look and feel of the platform. Throughout the project, we collaborated closely, adapted to challenges, and supported each other’s growth.
+
+  BAG represents more than just a class assignment—it reflects our technical skills, teamwork, and dedication to building something useful for real students. 
+  As we graduate, we hope to continue improving and expanding the project beyond this course.
+</p>
     </section>
 
     <!-- Top = 4 cards  -->
@@ -63,7 +68,7 @@
           Joey's strengths include problem-solving, attention to detail, and ensuring smooth integration between front-end design and back-end functionality.
         </p>
 
-        <a href="https://github.com/ackermaj5301" class="button secondary">Joey's Github</a>
+        <a href="https://github.com/ackermaj5301" class="btn secondary">Joey's Github</a>
 
       </article>
 
@@ -88,20 +93,32 @@
 
         </p>
       
-        <a href="https://github.com/isleym9447" class="button secondary">Mattea's Github</a>
+        <a href="https://github.com/isleym9447" class="btn secondary">Mattea's Github</a>
+
 
       </article>
 
        <article class="person-card">
 
-        <img src="images/team/Paul.png" alt="Paul" class="card-photo">
+        <img src="static/images/team/paul.PNG" alt="paul" class="card-photo">
 
         <h3>Paul Gayle</h3>
         <small>Programming Student</small>
         
-        <p>ADD IN BLURB</p>
+        <p>
+        Paul is a Computer Programming student with a strong focus on back-end development and API integration. He enjoys building the logic and systems that power applications, with particular interest in database design, server-side functionality, and connecting services through APIs.
+        </p>
 
-        <a href="https://github.com/PaulGayle" class="button secondary">Paul's Github</a>
+        <p>
+        He works effectively in team environments and is known for going above and beyond to support his peers and contribute to overall team success. He values collaboration, clear communication, and taking initiative when challenges arise.
+        </p>
+
+        <p>
+        Paul’s long-term goal is to pursue a career in software engineering, where he can continue developing scalable, efficient solutions while growing as a developer and contributing to impactful projects.
+        </p>
+
+        <a href="https://github.com/PaulGayle" class="btn secondary">Paul's Github</a>
+
         
       </article>
 
@@ -120,7 +137,8 @@
           with the time-crunch. 
         </p>
 
-        <a href="https://github.com/Lloffert" class="button secondary">Loffert's Github</a>
+        <a href="https://github.com/Lloffert" class="btn secondary">Loffert's Github</a>
+
         
       </article>
     </section>
@@ -130,12 +148,18 @@
       <article class="person-card highlight goal-card">
         <h3>Our Goal</h3>
         
-        <a href="https://github.com/CAPSTONE-Team-G0" class="button secondary">Team G0's Github</a>
-        <p>
-          BAG was created to help students better understand, manage, and stretch their financial aid through the semester
-          with a cleaner and more supportive experience.
-        </p>
         
+        <p>
+  BAG was created with one goal in mind: to help students take control of their financial aid instead of feeling overwhelmed by it.
+
+  Many students receive financial aid without a clear understanding of how to manage it across an entire semester. 
+  Our goal was to build a tool that simplifies that process—allowing users to track spending, stay organized, and make informed financial decisions.
+
+  We designed BAG to feel approachable, supportive, and practical. By combining clean design with meaningful functionality, 
+  we aim to reduce stress, improve financial awareness, and help students make their resources last longer.
+</p>
+        <a href="https://github.com/CAPSTONE-Team-G0" class="btn secondary">Team G0's Github</a>
+
       </article>
     </section>
 

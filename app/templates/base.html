@@ -9,6 +9,7 @@
   <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Work+Sans:wght@400;500;600&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
   {% block extra_css %}{% endblock %}
+  <link rel="icon" type="image/png" href="static/images/baglogo.png">
 </head>
 <body>
   <div class="app-shell">
@@ -17,7 +18,7 @@
     <aside class="sidebar">
       <div class="sidebar-brand">
         <a href="{{ url_for('home.welcome') }}" class="logo">
-          <img src="{{ url_for('static', filename='images/logos/baglogomain2.png') }}" alt="BAG Logo" class="sidebar-logo">
+          <img src="{{ url_for('static', filename='images/logos/BagLogoNewCorner.png') }}" alt="BAG Logo" class="sidebar-logo">
         </a>
         <div class="sidebar-tagline">SECURE YOUR BAG.</div>
       </div>
@@ -43,6 +44,11 @@
     <a href="{{ url_for('transactions.transaction_new') }}" class="nav-link">
       <img src="{{ url_for('static', filename='images/icons/expenseicon.png') }}" class="nav-icon">
       <span>Add Expense</span>
+    </a>
+
+    <a href="{{ url_for('statements.statements') }}" class="nav-link">
+      <img src="{{ url_for('static', filename='images/icons/statementsicon.png') }}" class="nav-icon">
+      <span>Statements</span>
     </a>
 
     <a href="{{ url_for('categories.categories') }}" class="nav-link">
@@ -90,22 +96,35 @@
 
         {% if session.get('user_id') %}
         <div class="topbar-right">
-          <div class="topbar-user">
-            <div class="topbar-user-text">
-              <div class="topbar-user-name">{{ nav_display_name }}</div>
-            </div>
+  <div class="topbar-user">
 
-            {% if nav_profile_image %}
-              <div class="topbar-avatar topbar-avatar-image">
-                <img src="{{ nav_profile_image }}" alt="Profile photo">
-              </div>
-            {% else %}
-              <div class="topbar-avatar">{{ nav_avatar_letter }}</div>
-            {% endif %}
-          </div>
-        </div>
+    <div class="topbar-user-text">
+      <div class="topbar-user-name">
+        {% if session.get('user_role') == 'parent' %}
+          Parent Portal
+        {% else %}
+          {{ nav_display_name }}
         {% endif %}
-      </header>
+      </div>
+    </div>
+
+    {% if session.get('user_role') == 'parent' %}
+      <div class="topbar-avatar topbar-avatar-image">
+        <img src="{{ url_for('static', filename='images/logos/baglogo.png') }}" alt="BAG Logo">
+      </div>
+    {% elif nav_profile_image %}
+      <div class="topbar-avatar topbar-avatar-image">
+        <img src="{{ nav_profile_image }}" alt="Profile photo">
+      </div>
+    {% else %}
+      <div class="topbar-avatar">{{ nav_avatar_letter }}</div>
+    {% endif %}
+
+  </div>
+</div>
+{% endif %}
+
+</header>
 
       <main class="page-content">
         {% with messages = get_flashed_messages() %}

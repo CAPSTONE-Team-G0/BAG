@@ -14,11 +14,21 @@ def _goal_date_range(duration: str, semester_row=None):
     today = date.today()
 
     if duration == "weekly":
-        start_date = today
-        end_date = today + timedelta(days=6)
+        # Monday → Sunday
+        start_date = today - timedelta(days=today.weekday())
+        end_date = start_date + timedelta(days=6)
+
     elif duration == "monthly":
-        start_date = today
-        end_date = today + timedelta(days=29)
+        # First → last day of month
+        start_date = today.replace(day=1)
+
+        if today.month == 12:
+            next_month = today.replace(year=today.year + 1, month=1, day=1)
+        else:
+            next_month = today.replace(month=today.month + 1, day=1)
+
+        end_date = next_month - timedelta(days=1)
+
     elif duration == "semester":
         if semester_row:
             start_date = date.fromisoformat(semester_row["start_date"])
@@ -26,6 +36,7 @@ def _goal_date_range(duration: str, semester_row=None):
         else:
             start_date = today
             end_date = today + timedelta(days=111)
+
     else:
         return None, None
 
@@ -63,13 +74,35 @@ def categories():
             """,
             (uid,),
         ).fetchone()
+
         if semester:
             sid = semester["id"]
 
     if request.method == "POST":
+        action = (request.form.get("action") or "save").strip().lower()
+
+        if action == "delete":
+            goal_id = request.form.get("goal_id")
+
+            db.execute(
+                """
+                UPDATE budget_goals
+                SET is_active = 0,
+                    updated_at = datetime('now')
+                WHERE id = ?
+                  AND user_id = ?
+                """,
+                (goal_id, uid),
+            )
+            db.commit()
+
+            flash("Budget goal deleted.")
+            return redirect(url_for("categories.categories"))
+
         category_id = (request.form.get("category_id") or "").strip()
         goal_amount = (request.form.get("goal_amount") or "").strip()
         duration = (request.form.get("duration") or "").strip().lower()
+        goal_id = (request.form.get("goal_id") or "").strip()
 
         if not sid:
             flash("Please select an active semester before creating budget goals.")
@@ -110,6 +143,28 @@ def categories():
         start_date, end_date = _goal_date_range(duration, semester)
         if not start_date or not end_date:
             flash("Could not create that goal.")
+            return redirect(url_for("categories.categories"))
+
+        if action == "edit" and goal_id:
+            db.execute(
+                """
+                UPDATE budget_goals
+                SET category_id = ?,
+                    duration = ?,
+                    goal_cents = ?,
+                    start_date = ?,
+                    end_date = ?,
+                    updated_at = datetime('now')
+                WHERE id = ?
+                  AND user_id = ?
+                  AND semester_id = ?
+                  AND is_active = 1
+                """,
+                (cid, duration, goal_cents, start_date, end_date, goal_id, uid, sid),
+            )
+            db.commit()
+
+            flash("Budget goal updated.")
             return redirect(url_for("categories.categories"))
 
         existing_goal = db.execute(
@@ -189,12 +244,11 @@ def categories():
         JOIN categories c
           ON c.id = bg.category_id
         LEFT JOIN transactions t
-          ON t.user_id = bg.user_id
-         AND t.semester_id = bg.semester_id
-         AND t.category_id = bg.category_id
-         AND t.type = 'expense'
-         AND date(t.date) >= date(bg.start_date)
-         AND date(t.date) <= date(bg.end_date)
+        ON t.user_id = bg.user_id
+        AND t.semester_id = bg.semester_id
+        AND t.category_id = bg.category_id
+        AND t.type = 'expense'
+        AND date(t.date) BETWEEN date(bg.start_date) AND date(bg.end_date)
         WHERE bg.user_id = ?
           AND bg.semester_id = ?
           AND bg.is_active = 1
@@ -222,17 +276,15 @@ def categories():
         if goal_cents > 0:
             percent = round((spent_cents / goal_cents) * 100)
 
-        if percent >= 100:
+        if percent <= 50:
+            status = "SAFE ZONE"
+            status_class = "safe"
+        elif percent <= 70:
             status = "WARNING"
-            status_class = "red"
-        elif percent >= 75:
-            status = "IN PROGRESS"
-            status_class = "blue"
+            status_class = "warning"
         else:
-            status = "ACTIVE"
-            status_class = "green"
-
-        
+            status = "DANGER"
+            status_class = "danger"
 
         category_name = (g["category_name"] or "").strip().lower()
 
@@ -256,9 +308,12 @@ def categories():
         goals.append(
             {
                 "id": g["id"],
+                "category_id": g["category_id"],
                 "category_name": g["category_name"],
                 "duration": g["duration"].title(),
+                "duration_value": g["duration"],
                 "goal_cents": goal_cents,
+                "goal_amount": f"{goal_cents / 100:.2f}",
                 "spent_cents": spent_cents,
                 "remaining_cents": remaining_cents,
                 "over_cents": over_cents,
@@ -272,21 +327,20 @@ def categories():
             }
         )
 
-
     goals_by_duration = {
-    "weekly": [],
-    "monthly": [],
-    "semester": [],
+        "weekly": [],
+        "monthly": [],
+        "semester": [],
     }
 
     for goal in goals:
         goals_by_duration[goal["duration"].lower()].append(goal)
 
     return render_template(
-    "categories.html",
-    categories=categories,
-    goals=goals,
-    goals_by_duration=goals_by_duration,
-    semester=semester,
-    active_semester_id=sid,
-)
+        "categories.html",
+        categories=categories,
+        goals=goals,
+        goals_by_duration=goals_by_duration,
+        semester=semester,
+        active_semester_id=sid,
+    )

@@ -1,10 +1,10 @@
 {% extends "base.html" %}
 {% block extra_css %}
 <link rel="stylesheet" href="{{ url_for('static', filename='css/parentstyle.css') }}">
+<link rel="stylesheet" href="{{ url_for('static', filename='css/dashboardstyle.css') }}">
 {% endblock %}
 
 {% block content %}
-
 
 <div class="card">
   <div class="row">
@@ -15,33 +15,101 @@
   <p class="muted">
     Viewing student:
     <strong>{{ student_name or student_email }}</strong>
-    {% if semester %}· Semester: <strong>{{ semester.name }}</strong>{% endif %}
+    {% if semester %}· Current Semester: <strong>{{ semester.name }}</strong>{% endif %}
   </p>
 </div>
 
 <div class="grid2">
+
   {% if link.can_view_on_track %}
   <div class="card">
     <h3>On-Track Status</h3>
     <p><strong>Status:</strong> {{ pace.status_text }}</p>
     <p><strong>Week:</strong> {{ pace.week_now }} / {{ pace.weeks_total }}</p>
-    <p><strong>Semester elapsed:</strong> {{ "%.1f"|format(pace.semester_elapsed_pct) }}%</p>
-    <p><strong>Funds spent:</strong> {{ "%.1f"|format(pace.funds_spent_pct) }}%</p>
-    <div class="message">{{ pace.message }}</div>
+
+    <div class="message">
+      {{ pace.message }}
+    </div>
   </div>
   {% endif %}
 
   {% if link.can_view_remaining_funding %}
   <div class="card">
     <h3>Remaining Funding</h3>
-    <p><strong>Remaining:</strong> ${{ "%.2f"|format(remaining) }}</p>
-    <p><strong>Safe to spend this week:</strong> ${{ "%.2f"|format(safe_weekly) }}</p>
 
-    {% if projection_week %}
-      <p><strong>Projection:</strong> At the current pace, funds may run out around week {{ projection_week }}.</p>
-    {% endif %}
+    <p><strong>Remaining:</strong> ${{ "%.2f"|format(remaining) }}</p>
+
+    <div class="dashboard-bar-compare">
+
+      <!-- Semester -->
+      <div class="bar-row">
+        <div class="bar-label">
+          <span>Semester elapsed</span>
+          <strong>{{ "%.1f"|format(pace.semester_elapsed_pct) }}%</strong>
+        </div>
+        <div class="bar-track">
+          <div class="bar-fill semester-fill"
+               style="width: {{ pace.semester_elapsed_pct }}%;">
+          </div>
+        </div>
+      </div>
+
+      <!-- Funds -->
+      <div class="bar-row">
+        <div class="bar-label">
+          <span>Funds spent</span>
+
+          <div class="bar-right">
+            <span class="pill 
+              {% if pace.funds_spent_pct <= 50 %}
+                green
+              {% elif pace.funds_spent_pct <= 70 %}
+                yellow
+              {% else %}
+                red
+              {% endif %}
+            ">
+              {% if pace.funds_spent_pct <= 50 %}
+                SAFE ZONE
+              {% elif pace.funds_spent_pct <= 70 %}
+                WARNING
+              {% else %}
+                DANGER
+              {% endif %}
+            </span>
+
+            <strong>{{ "%.1f"|format(pace.funds_spent_pct) }}%</strong>
+          </div>
+        </div>
+
+        <div class="bar-track">
+          <div class="bar-fill funds-fill
+            {% if pace.funds_spent_pct <= 50 %}
+              safe
+            {% elif pace.funds_spent_pct <= 70 %}
+              caution
+            {% else %}
+              warning
+            {% endif %}
+          "
+          style="width: {{ pace.funds_spent_pct|round(1) }}%;">
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+    <p class="muted">
+      {% if pace.funds_spent_pct > pace.semester_elapsed_pct %}
+        ⚠️ Spending faster than semester pace
+      {% else %}
+        ✅ Spending is under control
+      {% endif %}
+    </p>
+
   </div>
   {% endif %}
+
 </div>
 
 {% if link.can_view_total_funds %}
@@ -57,13 +125,19 @@
 
 {% if link.can_view_spending_breakdown %}
 <div class="grid2">
+
   <div class="card">
     <h3>Spending by Category</h3>
     {% if categories|length == 0 %}
       <p class="muted">No categorized expenses yet.</p>
     {% else %}
       <table class="table">
-        <thead><tr><th>Category</th><th>Total</th></tr></thead>
+        <thead>
+          <tr>
+            <th>Category</th>
+            <th>Total</th>
+          </tr>
+        </thead>
         <tbody>
           {% for r in categories %}
             <tr>
@@ -82,20 +156,26 @@
       <p class="muted">No transactions yet.</p>
     {% else %}
       <table class="table">
-        <thead><tr><th>Date</th><th>Type</th><th>Category</th><th>Amount</th></tr></thead>
+        <thead>
+          <tr>
+            <th>Date</th>
+            <th>Category</th>
+            <th>Amount</th>
+          </tr>
+        </thead>
         <tbody>
           {% for t in recent %}
             <tr>
               <td>{{ t.date }}</td>
-              <td>{{ t.type }}</td>
               <td>{{ t.category_name }}</td>
-              <td>${{ "%.2f"|format(t.amount_cents / 100) }}</td>
+              <td class="amount-negative">-${{ "%.2f"|format(t.amount_cents / 100) }}</td>
             </tr>
           {% endfor %}
         </tbody>
       </table>
     {% endif %}
   </div>
+
 </div>
 {% endif %}
 
