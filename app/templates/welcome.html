@@ -1,0 +1,64 @@
+{% extends "base.html" %}
+
+{% block title %}Welcome | BAG{% endblock %}
+
+{% block content %}
+
+<div class="welcome-page">
+  <div class="card welcome-card">
+    <h1>Welcome</h1>
+
+    <div class="welcome-actions">
+      <a href="{{ url_for('dashboard.dashboard') }}" class="btn welcome-btn">
+        Dashboard
+      </a>
+
+      <a href="{{ url_for('faqs.faq_help') }}" class="btn secondary welcome-btn">
+  Tutorial
+</a>
+    </div>
+
+    <div class="welcome-checklist">
+      <div class="welcome-step {% if profile_done %}is-complete{% endif %}">
+        <span class="welcome-check">{% if profile_done %}✓{% endif %}</span>
+        <span>Step 1:</span>
+        <a href="{{ url_for('profile.profile') }}">Create your profile</a>
+      </div>
+
+      <div class="welcome-step {% if semester_done %}is-complete{% endif %}">
+        <span class="welcome-check">{% if semester_done %}✓{% endif %}</span>
+        <span>Step 2:</span>
+        <a href="{{ url_for('semesters.semesters') }}">Create a semester</a>
+      </div>
+
+      <div class="welcome-step {% if funds_done or expense_done %}is-complete{% endif %}">
+        <span class="welcome-check">{% if funds_done or expense_done %}✓{% endif %}</span>
+        <span>Step 3:</span>
+        <a href="{{ url_for('aid.aid_new') }}">Add Funds</a>
+        <span>or</span>
+        <a href="{{ url_for('transactions.transaction_new') }}">Add Expense</a>
+      </div>
+
+      <div class="welcome-step {% if goal_done %}is-complete{% endif %}">
+        <span class="welcome-check">{% if goal_done %}✓{% endif %}</span>
+        <span>Step 4:</span>
+        <a href="{{ url_for('categories.categories') }}">Create a goal</a>
+      </div>
+
+      <div class="welcome-step {% if parent_done %}is-complete{% endif %}">
+        <span class="welcome-check">{% if parent_done %}✓{% endif %}</span>
+        <span>Step 5:</span>
+        <a href="{{ url_for('parent_access.parent_access') }}">Add a parent</a>
+        <span class="welcome-optional">(optional)</span>
+      </div>
+
+      <div class="welcome-step final-step">
+        <span class="welcome-check">★</span>
+        <span>Step 6:</span>
+        <strong>GET YOUR BAG!</strong>
+      </div>
+    </div>
+  </div>
+</div>
+
+{% endblock %}

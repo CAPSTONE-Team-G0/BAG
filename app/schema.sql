@@ -1,0 +1,120 @@
+-- USERS
+CREATE TABLE IF NOT EXISTS users (
+  id INTEGER PRIMARY KEY AUTOINCREMENT,
+  email TEXT UNIQUE NOT NULL,
+  password_hash TEXT NOT NULL,
+  role TEXT NOT NULL DEFAULT 'student' CHECK (role IN ('student', 'parent')),
+  security_question TEXT,
+  security_answer_hash TEXT,
+  created_at TEXT NOT NULL DEFAULT (datetime('now'))
+);
+
+-- PROFILE (1:1 with user)
+CREATE TABLE IF NOT EXISTS profiles (
+  user_id INTEGER PRIMARY KEY,
+  display_name TEXT,
+  state TEXT,
+  school TEXT,
+  student_status TEXT,
+  major_program TEXT, 
+  profile_image TEXT,
+  default_semester_weeks INTEGER NOT NULL DEFAULT 16,
+  FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE
+);
+
+-- SEMESTERS
+CREATE TABLE IF NOT EXISTS semesters (
+  id INTEGER PRIMARY KEY AUTOINCREMENT,
+  user_id INTEGER NOT NULL,
+  name TEXT NOT NULL,
+  term TEXT,
+  year INTEGER,
+  start_date TEXT NOT NULL,
+  end_date TEXT NOT NULL,
+  weeks INTEGER NOT NULL,
+  created_at TEXT NOT NULL DEFAULT (datetime('now')),
+  FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE
+);
+
+-- AID (lump sums)
+CREATE TABLE IF NOT EXISTS aid_awards (
+  id INTEGER PRIMARY KEY AUTOINCREMENT,
+  semester_id INTEGER NOT NULL,
+  source_type TEXT NOT NULL,
+  label TEXT NOT NULL,
+  amount_cents INTEGER NOT NULL CHECK (amount_cents >= 0),
+  disbursement_date TEXT NOT NULL,
+  created_at TEXT NOT NULL DEFAULT (datetime('now')),
+  FOREIGN KEY (semester_id) REFERENCES semesters(id) ON DELETE CASCADE
+);
+
+-- CATEGORIES (per user)
+CREATE TABLE IF NOT EXISTS categories (
+  id INTEGER PRIMARY KEY AUTOINCREMENT,
+  user_id INTEGER NOT NULL,
+  name TEXT NOT NULL,
+  created_at TEXT NOT NULL DEFAULT (datetime('now')),
+  UNIQUE(user_id, name),
+  FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE
+);
+
+-- CATEGORY BUDGETS (per user, per category)
+CREATE TABLE IF NOT EXISTS category_budgets (
+  id INTEGER PRIMARY KEY AUTOINCREMENT,
+  user_id INTEGER NOT NULL,
+  category_id INTEGER NOT NULL,
+  budget_cents INTEGER NOT NULL CHECK (budget_cents >= 0),
+  created_at TEXT NOT NULL DEFAULT (datetime('now')),
+  UNIQUE(user_id, category_id),
+  FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE,
+  FOREIGN KEY (category_id) REFERENCES categories(id) ON DELETE CASCADE
+);
+
+-- TRANSACTIONS (income + expense)
+CREATE TABLE IF NOT EXISTS transactions (
+  id INTEGER PRIMARY KEY AUTOINCREMENT,
+  user_id INTEGER NOT NULL,
+  semester_id INTEGER NOT NULL,
+  type TEXT NOT NULL CHECK (type IN ('income','expense')),
+  amount_cents INTEGER NOT NULL CHECK (amount_cents >= 0),
+  date TEXT NOT NULL,
+  category_id INTEGER,
+  note TEXT,
+  created_at TEXT NOT NULL DEFAULT (datetime('now')),
+  FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE,
+  FOREIGN KEY (semester_id) REFERENCES semesters(id) ON DELETE CASCADE,
+  FOREIGN KEY (category_id) REFERENCES categories(id) ON DELETE SET NULL
+);
+
+-- PARENT / GUARDIAN VIEW LINKS
+CREATE TABLE IF NOT EXISTS parent_links (
+  id INTEGER PRIMARY KEY AUTOINCREMENT,
+  student_user_id INTEGER NOT NULL,
+  parent_user_id INTEGER NOT NULL,
+  can_view_on_track INTEGER NOT NULL DEFAULT 1,
+  can_view_remaining_funding INTEGER NOT NULL DEFAULT 1,
+  can_view_total_funds INTEGER NOT NULL DEFAULT 0,
+  can_view_spending_breakdown INTEGER NOT NULL DEFAULT 0,
+  created_at TEXT NOT NULL DEFAULT (datetime('now')),
+  UNIQUE(student_user_id, parent_user_id),
+  FOREIGN KEY (student_user_id) REFERENCES users(id) ON DELETE CASCADE,
+  FOREIGN KEY (parent_user_id) REFERENCES users(id) ON DELETE CASCADE
+);
+
+-- BUDGET GOALS (per user, per semester, tracks expense spending)
+CREATE TABLE IF NOT EXISTS budget_goals (
+  id INTEGER PRIMARY KEY AUTOINCREMENT,
+  user_id INTEGER NOT NULL,
+  semester_id INTEGER NOT NULL,
+  category_id INTEGER NOT NULL,
+  duration TEXT NOT NULL CHECK (duration IN ('weekly', 'monthly', 'semester')),
+  goal_cents INTEGER NOT NULL CHECK (goal_cents > 0),
+  start_date TEXT NOT NULL,
+  end_date TEXT NOT NULL,
+  is_active INTEGER NOT NULL DEFAULT 1,
+  created_at TEXT NOT NULL DEFAULT (datetime('now')),
+  updated_at TEXT NOT NULL DEFAULT (datetime('now')),
+  FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE,
+  FOREIGN KEY (semester_id) REFERENCES semesters(id) ON DELETE CASCADE,
+  FOREIGN KEY (category_id) REFERENCES categories(id) ON DELETE CASCADE
+);

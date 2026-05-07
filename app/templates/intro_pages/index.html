@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>BAG | Semester Budgeting</title>
+  <link rel="icon" type="image/png" href="static/images/baglogo.png">
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/introstyle.css') }}">
+</head>
+
+<body>
+  <header class="site-header">
+    <nav class="navbar">
+      <a class="brand" href="{{ url_for('home.home') }}">
+        <div class="brand-badge">
+          <img src="{{ url_for('static', filename='images/logos/baglogo.png') }}" alt="BAG Logo">
+        </div>
+        <span>BAG Semester Budgeting</span>
+      </a>
+
+      <div class="nav-links">
+        <a class="active" href="{{ url_for('home.home') }}">Home</a>
+        <a href="{{ url_for('home.about') }}">About the Team</a>
+        <a href="{{ url_for('auth.login') }}" class="button get-started">Login</a>
+        <a href="{{ url_for('auth.register') }}" class="button register">Register</a>
+      </div>
+    </nav>
+  </header>
+
+  <main>
+    <section class="hero">
+      <img
+        src="{{ url_for('static', filename='images/logos/baglogotransparent.png') }}"
+        alt="BAG Semester Budgeting logo">
+
+      <h1>Take control of your semester finances.</h1>
+
+      <p>
+        BAG is a semester-based budgeting app designed for students managing financial aid,
+        personal expenses, and school-related costs.
+      </p>
+
+      <p>
+        Track your funds, monitor spending by category, set budgeting goals, and see whether
+        your money is lasting at the right pace for the semester.
+      </p>
+
+
+    </section>
+  </main>
+
+  <footer class="footer">
+    
+  </footer>
+</body>
+</html>

@@ -1,0 +1,32 @@
+{% extends "base.html" %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/miscstyle.css') }}">
+{% endblock %}
+
+{% block content %}
+{% include "partials/auth_nav.html" %}
+
+<div class="card narrow">
+  <h2>Security Question Reset</h2>
+  <p class="muted">Enter your email to find your security question.</p>
+
+  <form method="post" class="form">
+    <label for="email">Email</label>
+    <input
+      type="email"
+      id="email"
+      name="email"
+      required
+      placeholder="Enter your email"
+    >
+
+    <button class="btn" type="submit">Next</button>
+  </form>
+
+  <p class="hint">
+    <a class="link" href="{{ url_for('auth.login') }}">Back to login</a>
+  </p>
+</div>
+
+{% endblock %}

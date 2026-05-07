@@ -1,0 +1,96 @@
+{% extends "base.html" %}
+{% block extra_css %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/semestersstyle.css') }}">
+{% endblock %}
+
+{% block content %}
+
+<div class="card">
+  <div class="row">
+    <h2>Semesters</h2>
+    <a class="btn secondary" href="{{ url_for('semesters.semester_new') }}">+ New Semester</a>
+  </div>
+
+  <p class="muted">Today's date: {{ today }}</p>
+
+  {% if semesters|length == 0 %}
+    <p class="muted">No semesters yet. Create one to start.</p>
+  {% else %}
+
+    <!-- CURRENT -->
+    <h3 class="semester-section-title">Current</h3>
+    <table class="table">
+      <tbody>
+        {% for s in current_semesters %}
+        <tr>
+          <td><strong>{{ s.name }}</strong></td>
+          <td>{{ s.start_date }} → {{ s.end_date }}</td>
+          <td>
+            <span class="pill green">Current</span>
+          </td>
+          <td class="table-actions">
+            <a class="action-link" href="{{ url_for('semesters.semester_edit', semester_id=s.id) }}">Edit</a>
+
+            <form method="post" action="{{ url_for('semesters.semester_delete', semester_id=s.id) }}" class="inline-form">
+              <button type="submit" class="action-link delete-link">Delete</button>
+            </form>
+          </td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+
+    <!-- UPCOMING -->
+    <h3 class="semester-section-title">Upcoming</h3>
+    <table class="table">
+      <tbody>
+        {% for s in upcoming_semesters %}
+        <tr>
+          <td><strong>{{ s.name }}</strong></td>
+          <td>{{ s.start_date }} → {{ s.end_date }}</td>
+          <td>
+            <span class="pill">Upcoming</span>
+          </td>
+          <td class="table-actions">
+            <a class="action-link" href="{{ url_for('semesters.semester_edit', semester_id=s.id) }}">Edit</a>
+
+            <form method="post" action="{{ url_for('semesters.semester_delete', semester_id=s.id) }}" class="inline-form">
+              <button type="submit" class="action-link delete-link">Delete</button>
+            </form>
+          </td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+
+    <!-- PAST -->
+    <h3 class="semester-section-title">Past</h3>
+    <table class="table">
+      <tbody>
+        {% for s in past_semesters %}
+        <tr>
+          <td><strong>{{ s.name }}</strong></td>
+          <td>{{ s.start_date }} → {{ s.end_date }}</td>
+          <td>
+            <span class="pill muted">Past</span>
+          </td>
+          <td class="table-actions">
+            <a class="action-link" href="{{ url_for('semesters.semester_edit', semester_id=s.id) }}">Edit</a>
+
+            <form method="post" action="{{ url_for('semesters.semester_delete', semester_id=s.id) }}" class="inline-form">
+              <button type="submit" class="action-link delete-link">Delete</button>
+            </form>
+          </td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+
+  {% endif %}
+
+  {% if not profile %}
+    <p class="muted">Create a <a href="{{ url_for('profile.profile') }}">Profile</a>!</p>
+  {% endif %}
+</div>
+
+{% endblock %}

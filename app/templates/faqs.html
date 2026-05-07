@@ -1,0 +1,123 @@
+{% extends "base.html" %}
+{% block extra_css %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/faqsstyle.css') }}">
+{% endblock %}
+
+{% block content %}
+
+<div class="faq-page">
+  <div class="faq-hero card">
+    <p class="faq-eyebrow">Support</p>
+    <h1>Frequently Asked Questions</h1>
+    <p class="faq-hero-text">
+      Find quick answers about BAG, financial aid, military benefits, and where to get help.
+    </p>
+  </div>
+
+  <div class="faq-layout">
+    <aside class="faq-sidebar card">
+      <button class="faq-tab {% if active_tab == 'about-bag' %}active{% endif %}" type="button" data-faq-target="about-bag">
+        About BAG
+      </button>
+
+      <button class="faq-tab {% if active_tab == 'financial-aid' %}active{% endif %}" type="button" data-faq-target="financial-aid">
+        Financial Aid Questions
+      </button>
+
+      <button class="faq-tab {% if active_tab == 'military-benefits' %}active{% endif %}" type="button" data-faq-target="military-benefits">
+        Military Benefit Questions
+      </button>
+
+      <button class="faq-tab {% if active_tab == 'help-section' %}active{% endif %}" type="button" data-faq-target="help-section">
+        Help
+      </button>
+    </aside>
+
+    <section class="faq-content">
+      <div class="faq-panel {% if active_tab == 'about-bag' %}active{% endif %}" id="about-bag">
+        {% include "faq_sections/about_bag.html" %}
+      </div>
+
+      <div class="faq-panel {% if active_tab == 'financial-aid' %}active{% endif %}" id="financial-aid">
+        {% include "faq_sections/financial_aid.html" %}
+      </div>
+
+      <div class="faq-panel {% if active_tab == 'military-benefits' %}active{% endif %}" id="military-benefits">
+        {% include "faq_sections/military_benefits.html" %}
+      </div>
+
+      <div class="faq-panel {% if active_tab == 'help-section' %}active{% endif %}" id="help-section">
+        <div class="faq-panel-inner">
+          <div class="faq-panel-title-row">
+            <h2>Help</h2>
+          </div>
+
+          <details class="faq-row" open>
+            <summary>Create an account</summary>
+            <div class="faq-row-answer">
+              Start by registering and signing in. Then you can begin setting up the semester you want to manage.
+            </div>
+          </details>
+
+          <details class="faq-row">
+            <summary>Add a semester</summary>
+            <div class="faq-row-answer">
+              Add your semester dates so BAG can organize funds, expenses, and goals around that academic period.
+            </div>
+          </details>
+
+          <details class="faq-row">
+            <summary>Add funds and expenses</summary>
+            <div class="faq-row-answer">
+              Enter financial aid, income, and expenses so you can track how your money changes over time.
+            </div>
+          </details>
+
+          <details class="faq-row">
+            <summary>Create budgeting goals</summary>
+            <div class="faq-row-answer">
+              Set category goals like food, transportation, textbooks, or housing. BAG tracks your spending progress.
+            </div>
+          </details>
+
+          <details class="faq-row">
+            <summary>Review progress</summary>
+            <div class="faq-row-answer">
+              Use the dashboard to see funds left, spending totals, semester progress, and recent transactions.
+            </div>
+          </details>
+        </div>
+      </div>
+    </section>
+  </div>
+</div>
+
+<script>
+document.addEventListener("DOMContentLoaded", function () {
+  const tabs = document.querySelectorAll(".faq-tab");
+  const panels = document.querySelectorAll(".faq-panel");
+
+  tabs.forEach(function (tab) {
+    tab.addEventListener("click", function () {
+      const targetId = tab.getAttribute("data-faq-target");
+
+      tabs.forEach(function (btn) {
+        btn.classList.remove("active");
+      });
+
+      panels.forEach(function (panel) {
+        panel.classList.remove("active");
+      });
+
+      tab.classList.add("active");
+
+      const targetPanel = document.getElementById(targetId);
+      if (targetPanel) {
+        targetPanel.classList.add("active");
+      }
+    });
+  });
+});
+</script>
+
+{% endblock %}
