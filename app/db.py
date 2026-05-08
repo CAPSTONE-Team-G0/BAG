@@ -1,3 +1,7 @@
+# BAG — Budgeting Aid Guide
+# Copyright © 2026 Group_0
+# All Rights Reserved
+
 import os
 import sys
 import sqlite3
