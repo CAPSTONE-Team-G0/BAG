@@ -1,3 +1,6 @@
+# BAG — Budgeting Aid Guide
+# Copyright © 2026 Group_0
+# All Rights Reserved
 from datetime import date
 
 
@@ -24,3 +27,4 @@ def normalize_weeks(value: str, default_weeks: int) -> tuple[int, str | None]:
         return weeks, "Weeks must be between 8 and 26."
 
     return weeks, None
+

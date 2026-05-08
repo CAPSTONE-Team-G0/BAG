@@ -1,3 +1,6 @@
+# BAG — Budgeting Aid Guide
+# Copyright © 2026 Group_0
+# All Rights Reserved
 from datetime import date
 from app.pacing import compute_pace, safe_to_spend, runout_week_projection
 
@@ -26,3 +29,4 @@ def test_runout_projection_value():
     # if spent_so_far is 300 over 3 weeks elapsed (week_now=4), avg=100/week
     # remaining=500 => 5 weeks until zero => projected ~ week 9
     assert runout_week_projection(remaining=500, spent_so_far=300, week_now=4) == 9
+

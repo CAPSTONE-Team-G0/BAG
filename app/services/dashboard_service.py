@@ -1,3 +1,6 @@
+# BAG — Budgeting Aid Guide
+# Copyright © 2026 Group_0
+# All Rights Reserved
 from datetime import date
 from app.common.money import cents_to_money
 from app.pacing import compute_pace, safe_to_spend, runout_week_projection
@@ -88,3 +91,4 @@ def load_dashboard_data(db, user_id: int, semester_id: int, semester_row):
         "recent": recent,
         "aid_list": aid_list,
     }
+

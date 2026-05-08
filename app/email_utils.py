@@ -1,3 +1,6 @@
+# BAG — Budgeting Aid Guide
+# Copyright © 2026 Group_0
+# All Rights Reserved
 import smtplib
 from email.mime.text import MIMEText
 import os

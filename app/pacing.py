@@ -1,3 +1,6 @@
+# BAG — Budgeting Aid Guide
+# Copyright © 2026 Group_0
+# All Rights Reserved
 from __future__ import annotations
 from dataclasses import dataclass
 from datetime import date, datetime
@@ -79,3 +82,4 @@ def runout_week_projection(remaining: float, spent_so_far: float, week_now: int)
     weeks_until_zero = remaining / avg
     # projected run-out is current week + weeks_until_zero
     return int(ceil(week_now + weeks_until_zero))
+

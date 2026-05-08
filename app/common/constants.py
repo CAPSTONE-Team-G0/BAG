@@ -1,3 +1,6 @@
+# BAG � Budgeting Aid Guide
+# Copyright � 2026 Group_0
+# All Rights Reserved
 DEFAULT_CATEGORIES = [
     "Housing",
     "Food",

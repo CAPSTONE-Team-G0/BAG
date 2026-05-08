@@ -1,3 +1,6 @@
+# BAG — Budgeting Aid Guide
+# Copyright © 2026 Group_0
+# All Rights Reserved
 from app import create_app
 from app.db import get_db
 from werkzeug.security import generate_password_hash
