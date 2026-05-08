@@ -1,3 +1,7 @@
+# BAG — Budgeting Aid Guide
+# Copyright © 2026 Group_0
+# All Rights Reserved
+
 from flask import Flask, session
 from .db import init_app as init_db_app, get_db
 from .core import bp as core_bp
