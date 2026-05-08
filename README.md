@@ -1,74 +1,163 @@
+
+
 # 🎒 BAG — Budgeting Aid Guide
 
-BAG (Budgeting Aid Guide) is a Flask-based web application designed to help students manage their finances throughout a semester. It allows users to track funding, expenses, and spending habits in a structured and visual way.
+BAG (Budgeting Aid Guide) is a Flask-based financial management application designed to help students manage their finances throughout a semester. The application allows users to track funding, expenses, spending habits, and budgeting goals through an organized and user-friendly interface.
+
+BAG was developed as a collaborative Capstone project and now supports both web-based development mode and a standalone Windows desktop executable.
 
 ---
 
-## 🚀 Features
+# 🚀 Features
 
-* Dashboard with real-time financial insights
-* Add and manage funding (financial aid, income, etc.)
-* Track expenses by category
-* Statements page (full transaction history with income + expenses)
-* Semester-based budgeting
-* Spending analysis and projections
-* Parent access view (optional)
-* Secure login system
-
----
-
-## 🖥️ Requirements
-
-* Python 3.10 or higher
-* pip (Python package manager)
+- Dashboard with real-time financial insights
+- Add and manage funding (financial aid, income, etc.)
+- Track expenses by category
+- Statements page with full transaction history
+- Semester-based budgeting
+- Spending analysis and projections
+- Parent access view (optional)
+- Secure login and registration system
+- SQLite database integration
+- Desktop executable (.exe) support
+- Financial charts and visualizations
 
 ---
 
-## ▶️ Terminal Steps to Run the Project
+# 🖥️ Desktop Application Support
 
-Open PowerShell or the VS Code terminal.
+BAG can now run as a standalone Windows desktop application without requiring VS Code or Python installation.
 
-Clone the repository:
+The desktop version was built using:
+
+- Flask
+- PyWebView
+- PyInstaller
+- SQLite3
+
+---
+
+# ▶️ Running the Desktop Application
+
+## Run the Executable
+
+1. Extract the project ZIP folder
+2. Open the `dist` folder
+3. Double-click:
+
+```text
+run.exe
 ```
+
+---
+
+# ⚠️ Important Notes
+
+## Database Sync
+
+The desktop application uses a synced SQLite database located in:
+
+```text
+dist/instance/bag.sqlite3
+```
+
+Do NOT remove or separate the `instance` folder from the executable.
+
+---
+
+## Windows Security Warning
+
+If Windows Defender displays a warning:
+
+1. Click **More Info**
+2. Click **Run Anyway**
+
+This is expected for locally built executables.
+
+---
+
+# 💻 Running in Development Mode
+
+## Requirements
+
+- Python 3.12+
+- pip (Python package manager)
+
+---
+
+## Clone Repository
+
+```bash
 git clone https://github.com/CAPSTONE-Team-G0/BAG.git
 ```
-Go into the project folder:
-```
+
+## Open Project Folder
+
+```bash
 cd BAG
 ```
-Create a virtual environment:
-```
-python -m venv venv
-```
-Activate the virtual environment:
-```
-venv\Scripts\activate
-```
-(You should now see (venv) at the start of your terminal line)
 
-Install required packages:
-```
-pip install -r requirements.txt
-```
-Initialize the database:
-```
-flask --app app init-db
-```
-Run the Flask application:
-```
-flask run
-```
-Open your browser and go to:
+## Create Virtual Environment
 
-http://127.0.0.1:5000/
+```bash
+py -3.12 -m venv venv
+```
 
-To stop the server:
+## Activate Virtual Environment
 
-CTRL + C
+### Windows PowerShell
+
+```bash
+.\venv\Scripts\activate
+```
 
 ---
 
-## 👤 How to Use
+## Install Dependencies
+
+```bash
+pip install -r requirements.txt
+```
+
+Or manually:
+
+```bash
+pip install flask pywebview python-dotenv pyinstaller
+```
+
+---
+
+## Initialize Database
+
+```bash
+flask --app app init-db
+```
+
+---
+
+## Run Flask Development Server
+
+```bash
+flask run
+```
+
+Open browser:
+
+```text
+http://127.0.0.1:5000/
+```
+
+---
+
+## Run Desktop Mode
+
+```bash
+python run.py
+```
+
+---
+
+# 👤 How to Use
 
 1. Register a new account
 2. Log in
@@ -78,30 +167,29 @@ CTRL + C
 6. Add expenses
 7. Use the sidebar to navigate:
 
-   * Dashboard
-   * Statements
-   * Budgeting
+- Dashboard
+- Statements
+- Budgeting
 
 ---
 
-## 🧾 Statements Page
+# 🧾 Statements Page
 
 The Statements page provides a complete financial history:
 
-* Shows both income and expenses
-* Displays transaction type (Income / Expense)
-* Color-coded amounts:
-
-  * Green = Income
-  * Red = Expense
-* Allows editing and deleting entries
-* Combines funding and expenses into one view
+- Displays both income and expenses
+- Shows transaction type (Income / Expense)
+- Color-coded amounts:
+  - Green = Income
+  - Red = Expense
+- Allows editing and deleting entries
+- Combines funding and expenses into one view
 
 ---
 
-## 📁 Project Structure
+# 📁 Project Structure
 
-```
+```text
 app/
 ├── routes/
 │   ├── dashboard.py
@@ -116,36 +204,54 @@ app/
 └── __init__.py
 ```
 
+---
+
+# 🛠️ Technologies Used
+
+- Python
+- Flask
+- SQLite3
+- HTML / CSS
+- JavaScript
+- Chart.js
+- PyWebView
+- PyInstaller
 
 ---
 
-## 🛠️ Technologies Used
+# 📦 Packaging Information
 
-* Python (Flask)
-* SQLite
-* HTML / CSS
-* JavaScript (Chart.js)
+The executable was built using:
 
----
-
-## ⚠️ Notes
-
-* This project runs on a development server
-* The database must be initialized before running
-* Restart Flask after making changes
+```bash
+pyinstaller --noconfirm --onefile --windowed ^
+--add-data "app\templates;app\templates" ^
+--add-data "app\static;app\static" ^
+--add-data "app\schema.sql;app" ^
+--icon "baglogotransparent2.ico" ^
+run.py
+```
 
 ---
 
-## 👩‍💻 Team Members
+# ⚠️ Notes
 
-* Joey Ackerman-Lowery
-* Paul Gayle
-* Mattea Isley
-* Lydia Loffert
+- This project runs on a development server during development mode
+- The database must be initialized before running in Flask mode
+- Restart Flask after making code changes
+- The packaged executable automatically creates and manages the SQLite database beside the executable
 
 ---
 
-## 🤖 AI Usage
+# 👩‍💻 Team Members
 
-AI was used to assist with debugging, feature development, and documentation. All work was reviewed, tested, and implemented by the Team.
+- Joey Ackerman-Lowery
+- Paul Gayle
+- Mattea Isley
+- Lydia Loffert
 
+---
+
+# 🤖 AI Usage
+
+AI was used to assist with debugging, executable packaging, feature development, and documentation. All work was reviewed, tested, and implemented by the team.
