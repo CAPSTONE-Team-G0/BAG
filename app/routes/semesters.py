@@ -1,3 +1,7 @@
+# BAG — Budgeting Aid Guide
+# Copyright © 2026 Group_0
+# All Rights Reserved
+
 from datetime import date, datetime
 from flask import Blueprint, flash, redirect, render_template, request, session, url_for
 from app.auth import login_required
