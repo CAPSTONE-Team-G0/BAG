@@ -133,7 +133,7 @@ All Rights Reserved
 </header>
 
       <main class="page-content">
-        {% with messages = get_flashed_messages() %}
+         {% with messages = get_flashed_messages() %}
           {% if messages %}
             <div class="flash">
               {% for message in messages %}
@@ -147,9 +147,13 @@ All Rights Reserved
       </main>
 
       <footer class="footer">
-        
+        <small>
+          © 2026 BAG — Budgeting Aid Guide | All Rights Reserved
+        </small>
       </footer>
+
     </div>
   </div>
+
 </body>
 </html>
