@@ -102,7 +102,7 @@ cd BAG
 ## Create Virtual Environment
 
 ```bash
-py -3.12 -m venv venv
+py -3.14 -m venv venv
 ```
 
 ---
